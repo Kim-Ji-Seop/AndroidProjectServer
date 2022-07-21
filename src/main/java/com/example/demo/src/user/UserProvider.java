@@ -49,7 +49,7 @@ public class UserProvider {
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
-                    }
+    }
 
 
     public GetUserRes getUser(int userIdx) throws BaseException {
@@ -60,7 +60,13 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
+    public String checkId(String id) throws BaseException{
+        try{
+            return userDao.checkId(id);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
     public int checkEmail(String email) throws BaseException{
         try{
             return userDao.checkEmail(email);
@@ -69,24 +75,24 @@ public class UserProvider {
         }
     }
 
-    public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
-        User user = userDao.getPwd(postLoginReq);
-        String encryptPwd;
-        try {
-            encryptPwd=new SHA256().encrypt(postLoginReq.getPassword());
-        } catch (Exception ignored) {
-            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
-        }
-
-        if(user.getPassword().equals(encryptPwd)){
-            int userIdx = user.getUserIdx();
-            String jwt = jwtService.createJwt(userIdx);
-            return new PostLoginRes(userIdx,jwt);
-        }
-        else{
-            throw new BaseException(FAILED_TO_LOGIN);
-        }
-
-    }
+//    public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
+//        User user = userDao.getPwd(postLoginReq);
+//        String encryptPwd;
+//        try {
+//            encryptPwd=new SHA256().encrypt(postLoginReq.getPassword());
+//        } catch (Exception ignored) {
+//            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
+//        }
+//
+//        if(user.getPassword().equals(encryptPwd)){
+//            int userIdx = user.getUserIdx();
+//            String jwt = jwtService.createJwt(userIdx);
+//            return new PostLoginRes(userIdx,jwt);
+//        }
+//        else{
+//            throw new BaseException(FAILED_TO_LOGIN);
+//        }
+//
+//    }
 
 }
