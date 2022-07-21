@@ -36,10 +36,16 @@ public class UserService {
 
     //POST
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
-        //중복
+        //중복 이메일 체크
         if(userProvider.checkEmail(postUserReq.getEMAIL()) ==1){
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
+        //중복 아이디 체크
+        if(userProvider.checkId(postUserReq.getID()) ==1){
+            throw new BaseException(POST_USERS_EXISTS_ID);
+        }
+
+
 
         String pwd;
         try{
@@ -75,7 +81,16 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
+    public void inactiveUserStatus(PatchUserReq patchUserReq) throws BaseException {
+        try{
+            int result = userDao.inactiveUserStatus(patchUserReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USERSTATUS);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
     public void modifyUserPassword(PatchUserReq patchUserReq) throws BaseException {
         try{
             int result = userDao.modifyUserPassword(patchUserReq);

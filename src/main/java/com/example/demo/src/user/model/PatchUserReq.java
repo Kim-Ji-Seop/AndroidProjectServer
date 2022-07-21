@@ -28,5 +28,9 @@ public class PatchUserReq {
         this.USER_ID = USER_ID;
         this.PW = PW;
     }
+    public PatchUserReq(int USER_ID, int STATUS) {
+        this.USER_ID = USER_ID;
+        this.STATUS = STATUS;
+    }
 }
 

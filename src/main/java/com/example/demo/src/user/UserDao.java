@@ -113,11 +113,11 @@ public class UserDao {
         String lastInsertIdQuery = "select USER_ID from USER order by USER_ID desc limit 1;";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
-    public String checkId(String id){
+    public int checkId(String id){
         String checkIdQuery = "select exists(select ID from USER where ID = ?)";
         String checkIdParams = id;
         return this.jdbcTemplate.queryForObject(checkIdQuery,
-                String.class,
+                int.class,
                 checkIdParams);
     }
     public int checkEmail(String email){
@@ -128,6 +128,11 @@ public class UserDao {
                 checkEmailParams);
     }
 
+    public int inactiveUserStatus(PatchUserReq patchUserReq){
+        String inactiveUserStatusQuery = "update USER set STATUS = 0 where USER_ID = ?";
+        Object[] inactiveUserStatusParams = new Object[]{patchUserReq.getUSER_ID()};
+        return this.jdbcTemplate.update(inactiveUserStatusQuery,inactiveUserStatusParams);
+    }
     public int modifyUserPassword(PatchUserReq patchUserReq){
         String modifyUserPasswordQuery = "update USER set PW = ? where USER_ID = ? ";
         Object[] modifyUserPasswordParams = new Object[]{patchUserReq.getPW(), patchUserReq.getUSER_ID()};

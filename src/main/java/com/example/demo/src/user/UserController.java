@@ -126,16 +126,35 @@ public class UserController {
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/{userIdx}/password")
+    @PatchMapping("/{userIdx}/inactive") //status 0으로 변경 api -> 회원탈퇴
+    public BaseResponse<String> inactiveUserStatus(@PathVariable("userIdx") int userIdx, @RequestBody User user){
+        try {
+//            //jwt에서 idx 추출.
+//            int userIdxByJwt = jwtService.getUserIdx();
+//            //userIdx와 접근한 유저가 같은지 확인
+//            if(userIdx != userIdxByJwt){
+//                return new BaseResponse<>(INVALID_USER_JWT);
+//            }
+            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getSTATUS());
+            userService.inactiveUserStatus(patchUserReq);
+
+            String result = "회원탈퇴완료!";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    @ResponseBody
+    @PatchMapping("/{userIdx}/password") //패스워드 변경 api
     public BaseResponse<String> modifyUserPassword(@PathVariable("userIdx") int userIdx, @RequestBody User user){
         try {
-            //jwt에서 idx 추출.
-            int userIdxByJwt = jwtService.getUserIdx();
-            //userIdx와 접근한 유저가 같은지 확인
-            if(userIdx != userIdxByJwt){
-                return new BaseResponse<>(INVALID_USER_JWT);
-            }
-            //같다면 유저네임 변경
+//            //jwt에서 idx 추출.
+//            int userIdxByJwt = jwtService.getUserIdx();
+//            //userIdx와 접근한 유저가 같은지 확인
+//            if(userIdx != userIdxByJwt){
+//                return new BaseResponse<>(INVALID_USER_JWT);
+//            }
+//            //같다면 유저네임 변경
             PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getPW());
             userService.modifyUserPassword(patchUserReq);
 

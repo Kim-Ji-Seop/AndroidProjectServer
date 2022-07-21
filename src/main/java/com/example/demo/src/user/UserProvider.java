@@ -60,7 +60,7 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public String checkId(String id) throws BaseException{
+    public int checkId(String id) throws BaseException{
         try{
             return userDao.checkId(id);
         } catch (Exception exception){
