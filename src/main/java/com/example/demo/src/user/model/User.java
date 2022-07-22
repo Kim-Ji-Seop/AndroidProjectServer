@@ -26,4 +26,13 @@ public class User {
     private Timestamp CREATED_AT;
     private Timestamp UPDATED_AT;
     private int STATUS;
+
+    //login 생성자
+    public User(int USER_ID,String ID, String PW, String USER_NAME, String EMAIL){
+        this.USER_ID=USER_ID;
+        this.ID=ID;
+        this.PW=PW;
+        this.USER_NAME=USER_NAME;
+        this.EMAIL=EMAIL;
+    }
 }

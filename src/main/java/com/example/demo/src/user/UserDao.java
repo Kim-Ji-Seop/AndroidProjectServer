@@ -67,7 +67,6 @@ public class UserDao {
 
     public GetUserRes getUser(int userIdx){
         String getUserQuery = "select * from USER where USER_ID = ?";
-        int getUserParams = userIdx;
         return this.jdbcTemplate.queryForObject(getUserQuery,
                 (rs, rowNum) -> new GetUserRes(
                         rs.getInt("USER_ID"),
@@ -85,7 +84,7 @@ public class UserDao {
                         rs.getTimestamp("CREATED_AT"),
                         rs.getTimestamp("UPDATED_AT"),
                         rs.getInt("STATUS")),
-                getUserParams);
+                userIdx);
     }
     
 // createUser -> 회원가입 메소드
@@ -115,10 +114,9 @@ public class UserDao {
     }
     public int checkId(String id){
         String checkIdQuery = "select exists(select ID from USER where ID = ?)";
-        String checkIdParams = id;
         return this.jdbcTemplate.queryForObject(checkIdQuery,
                 int.class,
-                checkIdParams);
+                id);
     }
     public int checkEmail(String email){
         String checkEmailQuery = "select exists(select EMAIL from USER where EMAIL = ?)";
@@ -134,27 +132,31 @@ public class UserDao {
         return this.jdbcTemplate.update(inactiveUserStatusQuery,inactiveUserStatusParams);
     }
     public int modifyUserPassword(PatchUserReq patchUserReq){
-        String modifyUserPasswordQuery = "update USER set PW = ? where USER_ID = ? ";
+        String modifyUserPasswordQuery = "update USER set PW = ? where USER_ID = ?";
         Object[] modifyUserPasswordParams = new Object[]{patchUserReq.getPW(), patchUserReq.getUSER_ID()};
         return this.jdbcTemplate.update(modifyUserPasswordQuery,modifyUserPasswordParams);
     }
 
-//    public User getPwd(PostLoginReq postLoginReq){
-//        String getPwdQuery = "select USER_ID, ID, PW, EMAIL, USER_NAME from UserInfo where ID = ?";
-//        String getPwdParams = postLoginReq.getId();
-//
-//        return this.jdbcTemplate.queryForObject(getPwdQuery,
-//                (rs,rowNum)-> new User(
-//                        rs.getInt("userIdx"),
-//                        rs.getString("ID"),
-//                        rs.getString("userName"),
-//                        rs.getString("password"),
-//                        rs.getString("email")
-//                ),
-//                getPwdParams
-//                );
-//
-//    }
+    //수정필요
+    public User getPwd(PostLoginReq postLoginReq){
+        String getPwdQuery = "select USER_ID, ID, PW, EMAIL, USER_NAME from USER where ID = ?";
+        String getPwdParams = postLoginReq.getID();
 
-
+        return this.jdbcTemplate.queryForObject(getPwdQuery,
+                (rs,rowNum)-> new User(
+                        rs.getInt("USER_ID"),
+                        rs.getString("ID"),
+                        rs.getString("PW"),
+                        rs.getString("USER_NAME"),
+                        rs.getString("EMAIL")
+                ),
+                getPwdParams
+                );
+    }
+    //수정필요
+    public int loginUserStatusOn(PostLoginReq postLoginReq){
+        String modifyUserPasswordQuery = "update USER set STATUS = 1 where ID = ?";
+        Object[] modifyUserPasswordParams = new Object[]{postLoginReq.getID()};
+        return this.jdbcTemplate.update(modifyUserPasswordQuery,modifyUserPasswordParams);
+    }
 }

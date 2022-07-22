@@ -36,6 +36,7 @@ public class UserService {
 
     //POST
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
+        String pwd;
         //중복 이메일 체크
         if(userProvider.checkEmail(postUserReq.getEMAIL()) ==1){
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
@@ -44,10 +45,6 @@ public class UserService {
         if(userProvider.checkId(postUserReq.getID()) ==1){
             throw new BaseException(POST_USERS_EXISTS_ID);
         }
-
-
-
-        String pwd;
         try{
             //암호화
             pwd = new SHA256().encrypt(postUserReq.getPW());
@@ -96,6 +93,18 @@ public class UserService {
             int result = userDao.modifyUserPassword(patchUserReq);
             if(result == 0){
                 throw new BaseException(MODIFY_FAIL_USERPASSWORD);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //수정필요요
+   public void loginUserStatusOn(PostLoginReq postLoginReq) throws BaseException {
+        try{
+            int result = userDao.loginUserStatusOn(postLoginReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USERSTATUS_ON);
             }
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
