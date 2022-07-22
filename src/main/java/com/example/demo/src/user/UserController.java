@@ -36,6 +36,13 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
+
+    @ResponseBody
+    @GetMapping("/kakao")
+    public void  kakaoCallback(@RequestParam String code) throws BaseException {
+        String access_token = userService.getKaKaoAccessToken(code);
+        userService.createKakaoUser(access_token);
+    }
     /**
      * 회원 조회 API
      * [GET] /users
