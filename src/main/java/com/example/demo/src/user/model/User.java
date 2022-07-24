@@ -5,34 +5,31 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 
 @Getter
 @Setter
 @AllArgsConstructor
 public class User {
-    private int USER_ID;
-    private String ID;
-    private String PW;
-    private String USER_NAME;
-    private String EMAIL;
-    private String PHONE_NUMBER;
-    private Date BIRTH;
-    private String SEX;
-    private String ACCOUNT;
-    private String ADDRESS;
-    private int LOGIN_KAKAO;
-    private String INTRODUCE;
-    private Timestamp CREATED_AT;
-    private Timestamp UPDATED_AT;
-    private int STATUS;
+    private int userId;
+    private String id;
+    private String pw;
+    private String userName;
+    private String email;
+    private String phoneNumber;
+    private Date birth;
+    private String sex;
+    private int loginKakao;
+    private String introduce;
+    private Date createdAt;
+    private Date updatedAt;
+    private int status;
 
     //login 생성자
-    public User(int USER_ID,String ID, String PW, String USER_NAME, String EMAIL){
-        this.USER_ID=USER_ID;
-        this.ID=ID;
-        this.PW=PW;
-        this.USER_NAME=USER_NAME;
-        this.EMAIL=EMAIL;
+    public User(int userId, String id, String pw, String userName, String email){
+        this.userId = userId;
+        this.id = id;
+        this.pw = pw;
+        this.userName = userName;
+        this.email = email;
     }
 }

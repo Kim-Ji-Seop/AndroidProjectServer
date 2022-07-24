@@ -9,8 +9,6 @@ import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
@@ -43,30 +41,7 @@ public class UserController {
         String access_token = userService.getKaKaoAccessToken(code);
         userService.createKakaoUser(access_token);
     }
-    /**
-     * 회원 조회 API
-     * [GET] /users
-     * 회원 번호 및 이메일 검색 조회 API
-     * [GET] /users?Email=
-     * @return BaseResponse<List<GetUserRes>>
-     */
-    //Query String
-    @ResponseBody
-    @GetMapping("") // (GET) 127.0.0.1:9000/app/users
-    public BaseResponse<List<GetUserRes>> getUsers(@RequestParam(required = false) String Email) {
-        try{
-            if(Email == null){
-                List<GetUserRes> getUsersRes = userProvider.getUsers();
-                return new BaseResponse<>(getUsersRes);
-            }
-            // Get Users
-            List<GetUserRes> getUsersRes = userProvider.getUsersByEmail(Email);
-            return new BaseResponse<>(getUsersRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
-
+//-----------------------------------------------------------------------------------------------
     /**
      * 회원 1명 조회 API
      * [GET] /users/:userIdx
@@ -84,6 +59,23 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    /**
+     * 회원 1명 필수정보 조회 API
+     * [GET] /users/:userIdx/essential
+     * @return BaseResponse<GetUserRes>
+     */
+    // Path-variable
+    @ResponseBody
+    @GetMapping("/{userIdx}/essential") // (GET) localhost:9000/app/users/:userIdx/essential
+    public BaseResponse<GetUserRes> getUserEssential(@PathVariable("userIdx") int userIdx) {
+        // Get Users
+        try{
+            GetUserRes getUserRes = userProvider.getUserEssential(userIdx);
+            return new BaseResponse<>(getUserRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
     /**
      * 회원가입 API
@@ -95,11 +87,11 @@ public class UserController {
     @PostMapping("/register")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-        if(postUserReq.getEMAIL() == null){
+        if(postUserReq.getEmail() == null){
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
         }
         //이메일 정규표현
-        if(!isRegexEmail(postUserReq.getEMAIL())){
+        if(!isRegexEmail(postUserReq.getEmail())){
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
         try{
@@ -145,7 +137,7 @@ public class UserController {
 //            if(userIdx != userIdxByJwt){
 //                return new BaseResponse<>(INVALID_USER_JWT);
 //            }
-            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getSTATUS());
+            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getStatus());
             userService.inactiveUserStatus(patchUserReq);
 
             String result = "회원탈퇴완료!";
@@ -165,7 +157,7 @@ public class UserController {
 //                return new BaseResponse<>(INVALID_USER_JWT);
 //            }
 //            //같다면 유저네임 변경
-            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getPW());
+            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getPw());
             userService.modifyUserPassword(patchUserReq);
 
             String result = "변경완료!";
