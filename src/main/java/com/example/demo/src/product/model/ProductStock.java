@@ -7,9 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetProductRes {
-    private String productImage;
-    private String brandName;
-    private String productName;
-    private int productPrice;
+public class ProductStock {
+    private int productId;
+    private int sizeId;
+    private int stock;
 }

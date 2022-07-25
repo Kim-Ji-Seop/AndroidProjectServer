@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Getter
@@ -15,11 +16,9 @@ public class Product {
     private int categoryId;
     private String productPrice;
     private String productName;
-    private String productSize;
     private String productImage;
     private String productInfo;
-    private int  productStock;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
     private int status;
 }
