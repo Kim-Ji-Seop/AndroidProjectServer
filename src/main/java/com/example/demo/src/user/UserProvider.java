@@ -54,6 +54,13 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    public GetUserRes getUserAdditive(int userIdx) throws BaseException {
+        try {
+            return userDao.getUserAdditive(userIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 
 

@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Repository
 public class UserDao {
@@ -59,7 +60,7 @@ public class UserDao {
                 userIdx);
     }
     public GetUserRes getUserEssential(int userIdx){
-        String getUserQueryEss = "select ID,PW,USER_NAME,EMAIL,PHONE_NUMBER from USER where USER_ID = ?";
+        String getUserQueryEss = "select ID,PW,USER_NAME,EMAIL,PHONE_NUMBER from USER where USER_ID = ?;";
         return this.jdbcTemplate.queryForObject(getUserQueryEss,
                 (rs, rowNum) -> new GetUserRes(
                         rs.getString("ID"),
@@ -67,6 +68,15 @@ public class UserDao {
                         rs.getString("USER_NAME"),
                         rs.getString("EMAIL"),
                         rs.getString("PHONE_NUMBER")),
+                userIdx);
+    }
+    public GetUserRes getUserAdditive(int userIdx){
+        String getUserAdd = "select SEX,LOGIN_KAKAO,INTRODUCE from USER where USER_ID = ?;";
+        return this.jdbcTemplate.queryForObject(getUserAdd,
+                (rs,rowNum) -> new GetUserRes(
+                        rs.getString("SEX"),
+                        rs.getInt("LOGIN_KAKAO"),
+                        rs.getString("INTRODUCE")),
                 userIdx);
     }
     

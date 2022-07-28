@@ -28,4 +28,9 @@ public class GetUserRes {
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
+    public GetUserRes(String sex,int loginKakao,String introduce){
+        this.sex=sex;
+        this.loginKakao=loginKakao;
+        this.introduce=introduce;
+    }
 }

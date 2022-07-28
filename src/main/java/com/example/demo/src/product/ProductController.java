@@ -2,7 +2,9 @@ package com.example.demo.src.product;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.product.model.GetGoodsRes;
 import com.example.demo.src.product.model.GetProductRes;
+import com.example.demo.src.product.model.GetSizeRes;
 import com.example.demo.src.user.UserProvider;
 import com.example.demo.src.user.UserService;
 import com.example.demo.src.user.model.GetUserRes;
@@ -50,7 +52,6 @@ public class ProductController {
     @ResponseBody
     @GetMapping("/{divId}?category=") // (GET) 127.0.0.1:9000/app/products/{divId}
     public BaseResponse<List<GetProductRes>> getproducts(@PathVariable("divId") int divId) {
-        // Get Users
         try{
             List<GetProductRes> getProductRes = productProvider.getProducts(divId);
             return new BaseResponse<>(getProductRes);
@@ -58,4 +59,27 @@ public class ProductController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    @ResponseBody
+    @GetMapping("/goods/{productId}")
+    public BaseResponse<GetGoodsRes> getGoods(@PathVariable("productId") int productId){
+        try{
+            GetGoodsRes getGoodsRes = productProvider.getGoods(productId);
+            return new BaseResponse<>(getGoodsRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/goods/size/{productId}")
+    public BaseResponse<List<GetSizeRes>> getSize(@PathVariable("productId") int productId){
+        try{
+            List<GetSizeRes> getSizeRes = productProvider.getSize(productId);
+            return new BaseResponse<>(getSizeRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
 }

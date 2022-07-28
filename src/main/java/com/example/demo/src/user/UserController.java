@@ -76,6 +76,17 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    @ResponseBody
+    @GetMapping("/{userIdx}/additive") // (GET) localhost:9000/app/users/:userIdx/additive
+    public BaseResponse<GetUserRes> getUserAdditive(@PathVariable("userIdx") int userIdx) {
+        // Get Users
+        try{
+            GetUserRes getUserRes = userProvider.getUserAdditive(userIdx);
+            return new BaseResponse<>(getUserRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
     /**
      * 회원가입 API
