@@ -1,0 +1,17 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: demo
+
+  datasource:
+    platform: mysql
+    url: jdbc:mysql://52.79.250.193:3306/seopDB?autoReconnect=true # 변경해주세요
+    username: jskim2x
+    password: kyg19021@@
+    driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8버전
+    # driver-class-name: com.mysql.jdbc.Driver # mysql 5버전
+logging:
+  level:
+    com.example.demo.src: DEBUG
