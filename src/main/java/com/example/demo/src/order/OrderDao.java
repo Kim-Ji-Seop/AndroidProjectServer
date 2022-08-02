@@ -47,7 +47,8 @@ public class OrderDao {
                 userIdx);
     }
     public List<GetOrderRes> getHistory(int userIdx){
-        String Query = "select BRAND_NAME,PRODUCT_NAME,ps.SIZE_TYPE,DATE(o.CREATED_AT) as ORDERED_DAY,o.BUY_ID,p.PRODUCT_PRICE*b.PRODUCT_QUANTITY as TOTAL,b.PRODUCT_QUANTITY\n" +
+        String Query =
+                "select BRAND_NAME,PRODUCT_NAME,ps.SIZE_TYPE,DATE(o.CREATED_AT) as ORDERED_DAY,o.BUY_ID,p.PRODUCT_PRICE*b.PRODUCT_QUANTITY as TOTAL,b.PRODUCT_QUANTITY\n" +
                 "from `ORDER` o\n" +
                 "inner join BASKET b on o.BASKET_ID = b.BASKET_ID\n" +
                 "inner join USER u on u.USER_ID = b.USER_ID\n" +

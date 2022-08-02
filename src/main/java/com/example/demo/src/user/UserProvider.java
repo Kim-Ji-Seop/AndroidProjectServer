@@ -47,14 +47,14 @@ public class UserProvider {
         }
     }
     //개인회원 필수정보 조회
-    public GetUserRes getUserEssential(int userIdx) throws BaseException {
+    public GetEssentialInfoRes getUserEssential(int userIdx) throws BaseException {
         try {
             return userDao.getUserEssential(userIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public GetUserRes getUserAdditive(int userIdx) throws BaseException {
+    public GetAdditiveInfoRes getUserAdditive(int userIdx) throws BaseException {
         try {
             return userDao.getUserAdditive(userIdx);
         } catch (Exception exception) {
@@ -88,7 +88,7 @@ public class UserProvider {
         User user = userDao.getPwd(postLoginReq);
         String encryptPwd;
         try {
-            encryptPwd=new SHA256().encrypt(postLoginReq.getPW());
+            encryptPwd=new SHA256().encrypt(postLoginReq.getPw());
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }

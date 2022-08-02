@@ -37,7 +37,7 @@ public class ShipmentController {
         }
     }
     @ResponseBody
-    @PostMapping("/{userIdx}/add") // (GET) 127.0.0.1:9000/app/delivery/{userIdx}/add
+    @PostMapping("/{userIdx}") // (GET) 127.0.0.1:9000/app/delivery/{userIdx}/add
     public BaseResponse<PostShipmentRes> addShipment(@PathVariable("userIdx") int userIdx,@RequestBody PostShipmentReq postShipmentReq) {
         // Get
         try{

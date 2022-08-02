@@ -59,10 +59,10 @@ public class UserDao {
                         rs.getDate("CREATED_AT")),
                 userIdx);
     }
-    public GetUserRes getUserEssential(int userIdx){
+    public GetEssentialInfoRes getUserEssential(int userIdx){
         String getUserQueryEss = "select ID,PW,USER_NAME,EMAIL,PHONE_NUMBER from USER where USER_ID = ?;";
         return this.jdbcTemplate.queryForObject(getUserQueryEss,
-                (rs, rowNum) -> new GetUserRes(
+                (rs, rowNum) -> new GetEssentialInfoRes(
                         rs.getString("ID"),
                         rs.getString("PW"),
                         rs.getString("USER_NAME"),
@@ -70,10 +70,11 @@ public class UserDao {
                         rs.getString("PHONE_NUMBER")),
                 userIdx);
     }
-    public GetUserRes getUserAdditive(int userIdx){
-        String getUserAdd = "select SEX,LOGIN_KAKAO,INTRODUCE from USER where USER_ID = ?;";
+    public GetAdditiveInfoRes getUserAdditive(int userIdx){
+        String getUserAdd = "select BIRTH,SEX,LOGIN_KAKAO,INTRODUCE from USER where USER_ID = ?;";
         return this.jdbcTemplate.queryForObject(getUserAdd,
-                (rs,rowNum) -> new GetUserRes(
+                (rs,rowNum) -> new GetAdditiveInfoRes(
+                        rs.getDate("BIRTH"),
                         rs.getString("SEX"),
                         rs.getInt("LOGIN_KAKAO"),
                         rs.getString("INTRODUCE")),
@@ -83,8 +84,8 @@ public class UserDao {
 // createUser -> 회원가입 메소드
 // checkEmail -> 중복이메일검사 메소드
     public int createUser(PostUserReq postUserReq){
-        String createUserQuery = "insert into USER (USER_ID,ID,PW,USER_NAME,EMAIL,PHONE_NUMBER,BIRTH,SEX,LOGIN_KAKAO,INTRODUCE,CREATED_AT,UPDATED_AT,STATUS) VALUES (?,?,?,?,?,?,?,?,?,?,NOW(),NOW(),1)";
-        Object[] createUserParams = new Object[]{postUserReq.getUserId(),
+        String createUserQuery = "insert into USER (ID,PW,USER_NAME,EMAIL,PHONE_NUMBER,BIRTH,SEX,LOGIN_KAKAO,INTRODUCE,CREATED_AT,UPDATED_AT,STATUS) VALUES (?,?,?,?,?,?,?,?,?,NOW(),NOW(),1)";
+        Object[] createUserParams = new Object[]{
                                                 postUserReq.getId(),
                                                 postUserReq.getPw(),
                                                 postUserReq.getUserName(),
@@ -128,7 +129,7 @@ public class UserDao {
     //수정필요
     public User getPwd(PostLoginReq postLoginReq){
         String getPwdQuery = "select USER_ID, ID, PW, EMAIL, USER_NAME from USER where ID = ?";
-        String getPwdParams = postLoginReq.getID();
+        String getPwdParams = postLoginReq.getId();
 
         return this.jdbcTemplate.queryForObject(getPwdQuery,
                 (rs,rowNum)-> new User(
@@ -144,7 +145,7 @@ public class UserDao {
     //수정필요
     public int loginUserStatusOn(PostLoginReq postLoginReq){
         String modifyUserPasswordQuery = "update USER set STATUS = 1 where ID = ?";
-        Object[] modifyUserPasswordParams = new Object[]{postLoginReq.getID()};
+        Object[] modifyUserPasswordParams = new Object[]{postLoginReq.getId()};
         return this.jdbcTemplate.update(modifyUserPasswordQuery,modifyUserPasswordParams);
     }
 }

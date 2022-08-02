@@ -34,7 +34,7 @@ public class BasketController {
         }
     }
     @ResponseBody
-    @PostMapping("/add/{userId}/{productId}")
+    @PostMapping("/{userId}/{productId}")
     public BaseResponse<PostAddProductRes> addBasket(@PathVariable int userId,@PathVariable int productId,@RequestBody PostAddProductReq postAddProductReq){
         try{
             PostAddProductRes postAddProductRes = basketService.addBasket(userId,productId,postAddProductReq);

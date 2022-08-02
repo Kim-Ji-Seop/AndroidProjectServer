@@ -66,22 +66,22 @@ public class UserController {
      */
     // Path-variable
     @ResponseBody
-    @GetMapping("/{userIdx}/essential") // (GET) localhost:9000/app/users/:userIdx/essential
-    public BaseResponse<GetUserRes> getUserEssential(@PathVariable("userIdx") int userIdx) {
+    @GetMapping("/{userIdx}/essential") // (GET) localhost:9001/app/users/:userIdx/essential
+    public BaseResponse<GetEssentialInfoRes> getUserEssential(@PathVariable("userIdx") int userIdx) {
         // Get Users
         try{
-            GetUserRes getUserRes = userProvider.getUserEssential(userIdx);
+            GetEssentialInfoRes getUserRes = userProvider.getUserEssential(userIdx);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
     @ResponseBody
-    @GetMapping("/{userIdx}/additive") // (GET) localhost:9000/app/users/:userIdx/additive
-    public BaseResponse<GetUserRes> getUserAdditive(@PathVariable("userIdx") int userIdx) {
-        // Get Users
+    @GetMapping("/{userIdx}/additive") // (GET) localhost:9001/app/users/:userIdx/additive
+    public BaseResponse<GetAdditiveInfoRes> getUserAdditive(@PathVariable("userIdx") int userIdx) {
         try{
-            GetUserRes getUserRes = userProvider.getUserAdditive(userIdx);
+            GetAdditiveInfoRes getUserRes = userProvider.getUserAdditive(userIdx);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -95,7 +95,7 @@ public class UserController {
      */
     // Body
     @ResponseBody
-    @PostMapping("/register")
+    @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
         if(postUserReq.getEmail() == null){

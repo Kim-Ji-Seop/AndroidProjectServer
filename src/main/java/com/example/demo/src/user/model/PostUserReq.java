@@ -10,7 +10,6 @@ import java.sql.Date;
 @Setter
 @AllArgsConstructor
 public class PostUserReq {
-    private int userId;
     private String id;
     private String pw;
     private String userName;
