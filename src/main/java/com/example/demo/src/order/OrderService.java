@@ -1,16 +1,10 @@
 package com.example.demo.src.order;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.order.model.PostOrderReq;
-import com.example.demo.src.order.model.PostOrderRes;
-import com.example.demo.src.product.ProductDao;
-import com.example.demo.src.product.ProductProvider;
-import com.example.demo.src.shipment.model.PostShipmentReq;
-import com.example.demo.src.shipment.model.PostShipmentRes;
-import com.jogamp.common.util.ArrayHashSet;
+import com.example.demo.src.order.model.PostOrderFromBasketReq;
+import com.example.demo.src.order.model.PostOrderFromBasketRes;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
@@ -25,9 +19,9 @@ public class OrderService {
         this.orderProvider = orderProvider;
     }
 
-    public List<PostOrderRes> doOrder(int userIdx, List<Integer> basketId, PostOrderReq postOrderReq) throws BaseException {
+    public List<PostOrderFromBasketRes> doOrder(int userIdx, List<Integer> basketId, PostOrderFromBasketReq postOrderFromBasketReq) throws BaseException {
         try {
-            return orderDao.doOrder(userIdx,basketId,postOrderReq);
+            return orderDao.doOrder(userIdx,basketId, postOrderFromBasketReq);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

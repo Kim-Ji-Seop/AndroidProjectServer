@@ -6,12 +6,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class PostOrderReq {
     private String request;
-    public PostOrderReq(){
-
-    }
-    public PostOrderReq(String request){
-        this.request=request;
-    }
+    private int productId;
+    private int productQuantity;
 }

@@ -3,8 +3,8 @@ package com.example.demo.src.basket;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.basket.model.GetBasketRes;
-import com.example.demo.src.basket.model.PostAddProductReq;
-import com.example.demo.src.basket.model.PostAddProductRes;
+import com.example.demo.src.basket.model.PostBasketProductReq;
+import com.example.demo.src.basket.model.PostBasketProductRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,10 +35,10 @@ public class BasketController {
     }
     @ResponseBody
     @PostMapping("/{userId}/{productId}")
-    public BaseResponse<PostAddProductRes> addBasket(@PathVariable int userId,@PathVariable int productId,@RequestBody PostAddProductReq postAddProductReq){
+    public BaseResponse<PostBasketProductRes> addBasket(@PathVariable int userId, @PathVariable int productId, @RequestBody PostBasketProductReq postBasketProductReq){
         try{
-            PostAddProductRes postAddProductRes = basketService.addBasket(userId,productId,postAddProductReq);
-            return new BaseResponse<>(postAddProductRes);
+            PostBasketProductRes postBasketProductRes = basketService.addBasket(userId,productId, postBasketProductReq);
+            return new BaseResponse<>(postBasketProductRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

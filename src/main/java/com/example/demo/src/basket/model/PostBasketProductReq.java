@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostAddProductReq {
+public class PostBasketProductReq {
     private int sizeId;
     private int productQuantity;
 }

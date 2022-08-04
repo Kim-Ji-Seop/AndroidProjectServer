@@ -7,5 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostOrderRes {
+public class PostOrderFromBasketRes {
+    private int basketId;
+    private Long buyId;
+    private String request;
 }

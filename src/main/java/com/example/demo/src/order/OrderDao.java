@@ -1,11 +1,8 @@
 package com.example.demo.src.order;
 
 import com.example.demo.src.order.model.GetOrderRes;
-import com.example.demo.src.order.model.PostOrderReq;
-import com.example.demo.src.order.model.PostOrderRes;
-import com.example.demo.src.product.model.GetSizeRes;
-import com.example.demo.src.product.model.GetTopSizeRes;
-import com.example.demo.src.shipment.model.PostShipmentReq;
+import com.example.demo.src.order.model.PostOrderFromBasketReq;
+import com.example.demo.src.order.model.PostOrderFromBasketRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -22,17 +19,33 @@ public class OrderDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public List<PostOrderRes> doOrder(int userIdx, List<Integer> basketId, PostOrderReq postOrderReq){
-        for(int i=0;i<basketId.size();i++){
-            String addOrderQuery =
-                            "insert into `ORDER`(BASKET_ID, BUY_ID,REQUEST, CREATED_AT, UPDATED_AT, STATUS)\n" +
-                            "values (?,concat(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),concat('000',BASKET_ID)),?,NOW(),NOW(),1);";
-            Object[] addOrderParams = new Object[]{
-                    basketId.get(i),
-                    postOrderReq.getRequest()
-            };
-            this.jdbcTemplate.update(addOrderQuery,addOrderParams);
+    public List<PostOrderFromBasketRes> doOrder(int userIdx, List<Integer> basketId, PostOrderFromBasketReq postOrderFromBasketReq){
+        //장바구니에 담은 물품 결제
+        if(basketId != null){
+            for (Integer i : basketId) {
+                String addOrderQuery =
+                                "insert into `ORDER`(BUY_ID,BASKET_ID,USER_ID,REQUEST, CREATED_AT, UPDATED_AT, STATUS)\n" +
+                                "values (concat(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),concat('000',BASKET_ID)),?,?,?,NOW(),NOW(),1);";
+                Object[] addOrderParams = new Object[]{
+                        i,
+                        userIdx,
+                        postOrderFromBasketReq.getRequest()
+                };
+                this.jdbcTemplate.update(addOrderQuery, addOrderParams);
+                deductStockwithBasket(i); //재고량 연산
+
+            }
         }
+//        for(int i=0;i<basketId.size();i++){
+//            String addOrderQuery =
+//                            "insert into `ORDER`(BASKET_ID, BUY_ID,REQUEST, CREATED_AT, UPDATED_AT, STATUS)\n" +
+//                            "values (?,concat(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),concat('000',BASKET_ID)),?,NOW(),NOW(),1);";
+//            Object[] addOrderParams = new Object[]{
+//                    basketId.get(i),
+//                    postOrderReq.getRequest()
+//            };
+//            this.jdbcTemplate.update(addOrderQuery,addOrderParams);
+//        }
         String InsertIdQuery =
                         "select o.BASKET_ID,o.BUY_ID,o.REQUEST\n" +
                         "from `ORDER` o\n" +
@@ -40,7 +53,7 @@ public class OrderDao {
                         "on b.BASKET_ID=o.BASKET_ID\n" +
                         "where b.USER_ID=?;";
         return this.jdbcTemplate.query(InsertIdQuery,
-                (rs, rowNum) -> new PostOrderRes(
+                (rs, rowNum) -> new PostOrderFromBasketRes(
                         rs.getInt("BASKET_ID"),
                         rs.getLong("BUY_ID"),
                         rs.getString("REQUEST")),
@@ -68,4 +81,25 @@ public class OrderDao {
                         rs.getInt("PRODUCT_QUANTITY")),
                 userIdx);
     }
+    //재고량 차감 함수
+    public void deductStockwithBasket(int basketId){
+        int totalStock = this.jdbcTemplate.queryForObject( //총 재고량
+                    "select s.STOCK\n" +
+                            "from stock s\n" +
+                                   "inner join basket b on b.PRODUCT_ID = s.PRODUCT_ID and b.SIZE_ID=s.SIZE_ID\n" +
+                            "where b.BASKET_ID=?;",
+                int.class, basketId);
+        int quantity=this.jdbcTemplate.queryForObject( // 상품 수량
+                    "select b.PRODUCT_QUANTITY\n" +
+                            "from basket b\n" +
+                            "where b.BASKET_ID=?;",
+                int.class, basketId);
+
+        String inactiveUserStatusQuery =
+                "update STOCK s set s.STOCK = ?  where s.PRODUCT_ID= (select * from (select b.PRODUCT_ID as PRODUCT_ID from stock s inner join basket b on b.PRODUCT_ID = s.PRODUCT_ID and b.SIZE_ID=s.SIZE_ID where b.BASKET_ID=?) as temp) and\n" +
+                "s.SIZE_ID = (select * from(select b.SIZE_ID as SIZE_ID from stock s inner join basket b on b.PRODUCT_ID = s.PRODUCT_ID and b.SIZE_ID=s.SIZE_ID where b.BASKET_ID=?) as temp1 );";
+        Object[] inactiveUserStatusParams = new Object[]{totalStock-quantity,basketId,basketId};
+        this.jdbcTemplate.update(inactiveUserStatusQuery,inactiveUserStatusParams);
+    }
+
 }

@@ -12,6 +12,8 @@ import java.sql.Time;
 public class Order {
     private int basketId;
     private Long buyId;
+    private int userId;
+    private int productId;
     private int totalPrice;
     private String request;
     private Time createdAt;

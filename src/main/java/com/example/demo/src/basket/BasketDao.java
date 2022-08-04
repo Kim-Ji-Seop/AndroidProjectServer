@@ -1,9 +1,7 @@
 package com.example.demo.src.basket;
 
 import com.example.demo.src.basket.model.GetBasketRes;
-import com.example.demo.src.basket.model.PostAddProductReq;
-import com.example.demo.src.product.model.GetProductRes;
-import com.example.demo.src.user.model.PostUserReq;
+import com.example.demo.src.basket.model.PostBasketProductReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -45,15 +43,15 @@ public class BasketDao {
                         rs.getInt("TOTAL")),
                 userId);
     }
-    public int addBasket(int userId, int productId, PostAddProductReq postAddProductReq){
+    public int addBasket(int userId, int productId, PostBasketProductReq postBasketProductReq){
         String Query =
                 "insert into BASKET (USER_ID, PRODUCT_ID, SIZE_ID,PRODUCT_QUANTITY, CREATED_AT, UPDATED_AT, STATUS)\n" +
                 "values (?,?,?,?,NOW(),NOW(),1);";
         Object[] Params = new Object[]{
                 userId,
                 productId,
-                postAddProductReq.getSizeId(),
-                postAddProductReq.getProductQuantity()
+                postBasketProductReq.getSizeId(),
+                postBasketProductReq.getProductQuantity()
         };
         this.jdbcTemplate.update(Query, Params);
 
