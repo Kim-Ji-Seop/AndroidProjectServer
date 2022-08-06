@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostOrderReq {
-    private String request;
     private int productId;
     private int productQuantity;
+    private String sizeType;
 }

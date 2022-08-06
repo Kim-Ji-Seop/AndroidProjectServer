@@ -3,7 +3,10 @@ package com.example.demo.src.order;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.order.model.PostOrderFromBasketReq;
 import com.example.demo.src.order.model.PostOrderFromBasketRes;
+import com.example.demo.src.order.model.PostOrderReq;
+import com.example.demo.src.order.model.PostOrderRes;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,13 +21,20 @@ public class OrderService {
         this.orderDao = orderDao;
         this.orderProvider = orderProvider;
     }
-
-    public List<PostOrderFromBasketRes> doOrder(int userIdx, List<Integer> basketId, PostOrderFromBasketReq postOrderFromBasketReq) throws BaseException {
+    @Transactional(rollbackFor = Exception.class)
+    public List<PostOrderFromBasketRes> doOrderFromBasket(int userIdx, PostOrderFromBasketReq postOrderFromBasketReq) throws BaseException {
         try {
-            return orderDao.doOrder(userIdx,basketId, postOrderFromBasketReq);
+            return orderDao.doOrderFromBasket(userIdx, postOrderFromBasketReq);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
-
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public PostOrderRes doOrder(int userIdx, PostOrderReq postOrderReq) throws BaseException {
+        try {
+            return orderDao.doOrder(userIdx,postOrderReq);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 }

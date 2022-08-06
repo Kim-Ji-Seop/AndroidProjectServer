@@ -1,16 +1,16 @@
 package com.example.demo.src.order.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostOrderFromBasketReq {
-    private String request;
-    public PostOrderFromBasketReq(){
-
-    }
-    public PostOrderFromBasketReq(String request){
-        this.request=request;
-    }
+    private List<Integer> basketId;
 }

@@ -8,4 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostOrderRes {
+    private int productId;
+    private int productQuantity;
 }
