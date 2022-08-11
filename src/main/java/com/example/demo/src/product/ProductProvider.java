@@ -19,9 +19,9 @@ public class ProductProvider {
         this.productDao=productDao;
     }
 
-    public List<GetProductRes> getProducts(int divId) throws BaseException {
+    public List<GetProductRes> getProducts(int divId,Integer pageNum) throws BaseException {
         try {
-            return productDao.getProducts(divId);
+            return productDao.getProducts(divId,pageNum);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

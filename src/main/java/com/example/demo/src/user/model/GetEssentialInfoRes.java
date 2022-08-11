@@ -8,8 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetEssentialInfoRes {
-    private String id;
-    private String pw;
     private String userName;
     private String email;
     private String phoneNumber;

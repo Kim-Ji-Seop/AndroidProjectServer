@@ -21,8 +21,7 @@ public class PatchUserReq {
     private int status;
 
     // 비밀번호 변경 시 필요한 생성자.
-    public PatchUserReq(int userId, String pw) {
-        this.userId = userId;
+    public PatchUserReq(String pw) {
         this.pw = pw;
     }
     public PatchUserReq(int userId, int status) {

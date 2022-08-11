@@ -8,6 +8,7 @@ import com.example.demo.src.shipment.model.PostShipmentReq;
 import com.example.demo.src.shipment.model.PostShipmentRes;
 import com.example.demo.src.user.model.GetUserRes;
 import com.example.demo.src.user.model.PostUserReq;
+import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,16 +21,20 @@ public class ShipmentController {
     private final ShipmentProvider shipmentProvider;
     @Autowired
     private final ShipmentService shipmentService;
+    @Autowired
+    private final JwtService jwtService;
 
-    public ShipmentController(ShipmentProvider shipmentProvider, ShipmentService shipmentService){
+    public ShipmentController(ShipmentProvider shipmentProvider, ShipmentService shipmentService,JwtService jwtService){
         this.shipmentProvider = shipmentProvider;
         this.shipmentService = shipmentService;
+        this.jwtService = jwtService;
     }
     @ResponseBody
-    @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/app/delivery/{userIdx}
-    public BaseResponse<List<GetShipmentRes>> getShipment(@PathVariable("userIdx") int userIdx) {
+    @GetMapping("") // (GET) 127.0.0.1:9000/app/delivery
+    public BaseResponse<List<GetShipmentRes>> getShipment() {
         // Get Users
         try{
+            int userIdx = jwtService.getUserIdx();
             List<GetShipmentRes> getShipmentRes = shipmentProvider.getShipment(userIdx);
             return new BaseResponse<>(getShipmentRes);
         } catch(BaseException exception){
@@ -37,10 +42,11 @@ public class ShipmentController {
         }
     }
     @ResponseBody
-    @PostMapping("/{userIdx}") // (GET) 127.0.0.1:9000/app/delivery/{userIdx}/add
-    public BaseResponse<PostShipmentRes> addShipment(@PathVariable("userIdx") int userIdx,@RequestBody PostShipmentReq postShipmentReq) {
+    @PostMapping("") // (GET) 127.0.0.1:9000/app/delivery
+    public BaseResponse<PostShipmentRes> addShipment(@RequestBody PostShipmentReq postShipmentReq) {
         // Get
         try{
+            int userIdx = jwtService.getUserIdx();
             PostShipmentRes postShipmentRes = shipmentService.addShipment(userIdx,postShipmentReq);
             return new BaseResponse<>(postShipmentRes);
         } catch(BaseException exception){

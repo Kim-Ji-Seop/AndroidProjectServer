@@ -60,11 +60,9 @@ public class UserDao {
                 userIdx);
     }
     public GetEssentialInfoRes getUserEssential(int userIdx){
-        String getUserQueryEss = "select ID,PW,USER_NAME,EMAIL,PHONE_NUMBER from USER where USER_ID = ?;";
+        String getUserQueryEss = "select USER_NAME,EMAIL,PHONE_NUMBER from USER where USER_ID = ?;";
         return this.jdbcTemplate.queryForObject(getUserQueryEss,
                 (rs, rowNum) -> new GetEssentialInfoRes(
-                        rs.getString("ID"),
-                        rs.getString("PW"),
                         rs.getString("USER_NAME"),
                         rs.getString("EMAIL"),
                         rs.getString("PHONE_NUMBER")),
@@ -115,14 +113,14 @@ public class UserDao {
                 checkEmailParams);
     }
 
-    public int inactiveUserStatus(PatchUserReq patchUserReq){
+    public int inactiveUserStatus(int userIdx){
         String inactiveUserStatusQuery = "update USER set STATUS = 0 where USER_ID = ?";
-        Object[] inactiveUserStatusParams = new Object[]{patchUserReq.getUserId()};
+        Object[] inactiveUserStatusParams = new Object[]{userIdx};
         return this.jdbcTemplate.update(inactiveUserStatusQuery,inactiveUserStatusParams);
     }
-    public int modifyUserPassword(PatchUserReq patchUserReq){
+    public int modifyUserPassword(int userIdx,PatchPwReq patchPwReq){
         String modifyUserPasswordQuery = "update USER set PW = ? where USER_ID = ?";
-        Object[] modifyUserPasswordParams = new Object[]{patchUserReq.getPw(), patchUserReq.getUserId()};
+        Object[] modifyUserPasswordParams = new Object[]{patchPwReq.getPw(), userIdx};
         return this.jdbcTemplate.update(modifyUserPasswordQuery,modifyUserPasswordParams);
     }
 

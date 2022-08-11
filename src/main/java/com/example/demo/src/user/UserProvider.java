@@ -61,13 +61,6 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
-
-
-
-
-
-
     public int checkId(String id) throws BaseException{
         try{
             return userDao.checkId(id);
@@ -88,14 +81,14 @@ public class UserProvider {
         User user = userDao.getPwd(postLoginReq);
         String encryptPwd;
         try {
-            encryptPwd=new SHA256().encrypt(postLoginReq.getPw());
+            encryptPwd=new SHA256().encrypt(postLoginReq.getPw()); // request로 보낸 비밀번호 암호화
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
 
         if(user.getPw().equals(encryptPwd)){
-            int userIdx = user.getUserId();
-            String jwt = jwtService.createJwt(userIdx);
+            int userIdx = user.getUserId(); // response로 보낼 userId
+            String jwt = jwtService.createJwt(userIdx); // jwt response
             return new PostLoginRes(userIdx,jwt);
         }
         else{

@@ -17,9 +17,9 @@ public class OrderProvider {
         this.orderDao=orderDao;
     }
 
-    public List<GetOrderRes> getHistory(int userIdx) throws BaseException {
+    public List<GetOrderRes> getHistory(int userIdx,int cursor) throws BaseException {
         try {
-            return orderDao.getHistory(userIdx);
+            return orderDao.getHistory(userIdx,cursor);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

@@ -1,5 +1,6 @@
 package com.example.demo.src.order;
 
+import com.example.demo.src.basket.model.Basket;
 import com.example.demo.src.order.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,20 +27,23 @@ public class OrderDao {
      */
     public List<PostOrderFromBasketRes> doOrderFromBasket(int userIdx, PostOrderFromBasketReq postOrderFromBasketReq){
         List<Integer> basketId = postOrderFromBasketReq.getBasketId();
+        Basket basketList;
         //장바구니에 담은 물품 결제
         if(basketId != null){
             for (Integer i : basketId) {
+                basketList = getBasketInfo(userIdx,i);
                 deductStockwithBasket(i); //재고량 연산
                 deleteBasketInfo(i); //장바구니 정보 수정 status 1->0
                 String addOrderQuery =
-                                "insert into `order`(BUY_ID,BASKET_ID,USER_ID,PRODUCT_ID,PRODUCT_QUANTITY, CREATED_AT, UPDATED_AT, STATUS)\n" +
-                                "values (cast(concat(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),concat('000',?)) as unsigned integer),?,?,?,?,NOW(),NOW(),1);";
+                                "insert into `order`(BUY_ID,BASKET_ID,USER_ID,PRODUCT_ID,SIZE_ID,PRODUCT_QUANTITY, CREATED_AT, UPDATED_AT, STATUS)\n" +
+                                "values (cast(concat(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),concat('000',?)) as unsigned integer),?,?,?,?,?,NOW(),NOW(),1);";
                 Object[] addOrderParams = new Object[]{
-                        i,
-                        i,
-                        userIdx,
-                        null,
-                        null
+                        basketList.getBasketId(),
+                        basketList.getBasketId(),
+                        basketList.getUserId(),
+                        basketList.getProductId(),
+                        basketList.getSizeId(),
+                        basketList.getProductQuantity()
                 };
                 this.jdbcTemplate.update(addOrderQuery, addOrderParams);
             }
@@ -56,6 +60,20 @@ public class OrderDao {
                         rs.getInt("BASKET_ID")),
                 userIdx);
     }
+    public Basket getBasketInfo(int userIdx,int basketIdx){
+        String checkQuery = "select * from basket where USER_ID=? and BASKET_ID=?;";
+        return this.jdbcTemplate.queryForObject(checkQuery,
+                (rs, rowNum) -> new Basket(
+                        rs.getInt("BASKET_ID"),
+                        rs.getInt("USER_ID"),
+                        rs.getInt("PRODUCT_ID"),
+                        rs.getInt("SIZE_ID"),
+                        rs.getInt("PRODUCT_QUANTITY"),
+                        rs.getTimestamp("CREATED_AT"),
+                        rs.getTimestamp("UPDATED_AT"),
+                        rs.getInt("STATUS")),
+                userIdx,basketIdx);
+    }
     /**
      * 트랜잭션 2 - 서비스 계층에서 어노테이션
      * 바로구매
@@ -65,13 +83,16 @@ public class OrderDao {
      */
     public PostOrderRes doOrder(int userIdx, PostOrderReq postOrderReq){
         deductStock(postOrderReq.getProductId(), postOrderReq.getProductQuantity(),postOrderReq.getSizeType()); // 재고량 차감
+        int lastOrderId = this.jdbcTemplate.queryForObject( // 주문 전 마지막 orderId
+                "select ORDER_ID+1 from `order` ORDER BY ORDER_ID DESC LIMIT 1;",
+                int.class);
         String doOrderQuery =
-                "insert into `order`(BUY_ID, BASKET_ID, USER_ID, PRODUCT_ID, PRODUCT_QUANTITY, CREATED_AT, UPDATED_AT, STATUS)\n" +
-                "values (cast(concat(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),concat('000',?)) as unsigned integer),null,?,?,?,NOW(),NOW(),1);";
+                "insert into `order`(BASKET_ID, USER_ID, PRODUCT_ID,SIZE_ID,BUY_ID,PRODUCT_QUANTITY, CREATED_AT, UPDATED_AT, STATUS)\n" +
+                        "            values (null,?,?,null,cast(concat(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),concat('000',?)) as unsigned integer),?,NOW(),NOW(),1);";
         Object[] doOrderParams = new Object[]{
-                postOrderReq.getProductId(),
                 userIdx,
                 postOrderReq.getProductId(),
+                lastOrderId,
                 postOrderReq.getProductQuantity()
         };
         this.jdbcTemplate.update(doOrderQuery,doOrderParams);
@@ -88,13 +109,17 @@ public class OrderDao {
                 );
     }
     // 브랜드 명, 상품 명, 사이즈 타입, 주문일자, 주문번호, 총 주문금액, 수량
-    public List<GetOrderRes> getHistory(int userIdx){
+    // 커서 페이징 -> 근데 여기서 커서페이징은 필요없을듯?
+    public List<GetOrderRes> getHistory(int userIdx,int cursor){
         String Query =
-                "select (select BRAND_NAME from brand b where p.BRAND_ID=b.BRAND_ID) as BRAND_NAME,p.PRODUCT_NAME,ps.SIZE_TYPE,DATE(o.CREATED_AT) as ORDERED_DAY,o.BUY_ID,p.PRODUCT_PRICE*o.PRODUCT_QUANTITY as TOTAL_PRICE,o.PRODUCT_QUANTITY\n" +
+                        "select (select BRAND_NAME from brand b where p.BRAND_ID=b.BRAND_ID) as BRAND_NAME,p.PRODUCT_NAME,ps.SIZE_TYPE,DATE(o.CREATED_AT) as ORDERED_DAY,o.BUY_ID,p.PRODUCT_PRICE*o.PRODUCT_QUANTITY as TOTAL_PRICE,o.PRODUCT_QUANTITY\n" +
                         "from `order` o\n" +
                         "inner join product p on o.PRODUCT_ID = p.PRODUCT_ID\n" +
                         "inner join product_div pd on p.DIV_ID = pd.DIV_ID\n" +
-                        "inner join product_size ps on o.SIZE_ID = ps.SIZE_ID;";
+                        "inner join product_size ps on o.SIZE_ID = ps.SIZE_ID\n" +
+                        "where USER_ID=? and ORDER_ID <= ?\n" +
+                        "ORDER BY BUY_ID DESC\n" +
+                        "LIMIT 5;";
         return this.jdbcTemplate.query(Query,
                 (rs, rowNum) -> new GetOrderRes(
                         rs.getString("BRAND_NAME"),
@@ -104,14 +129,14 @@ public class OrderDao {
                         rs.getLong("BUY_ID"),
                         rs.getInt("TOTAL_PRICE"),
                         rs.getInt("PRODUCT_QUANTITY")),
-                userIdx);
+                userIdx,cursor);
     }
     //재고량 차감 함수
     public void deductStockwithBasket(int basketId){
         int totalStock = this.jdbcTemplate.queryForObject( //총 재고량
-                    "select s.STOCK\n" +
+                            "select s.STOCK\n" +
                             "from stock s\n" +
-                                   "inner join basket b on b.PRODUCT_ID = s.PRODUCT_ID and b.SIZE_ID=s.SIZE_ID\n" +
+                                    "inner join basket b on b.PRODUCT_ID = s.PRODUCT_ID and b.SIZE_ID=s.SIZE_ID\n" +
                             "where b.BASKET_ID=?;",
                 int.class, basketId);
         int quantity=this.jdbcTemplate.queryForObject( // 상품 수량

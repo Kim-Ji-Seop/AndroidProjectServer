@@ -20,7 +20,7 @@ public class ShipmentDao {
     }
 
     public List<GetShipmentRes> getShipment(int userIdx) {
-        String getShipmentQuery = "SELECT u.USER_NAME,s.SHIPMENT_NAME,s.ADDRESS,u.PHONE_NUMBER FROM SHIPMENT s INNER JOIN USER u ON u.USER_ID = s.USER_ID WHERE u.USER_ID = ?;";
+        String getShipmentQuery = "SELECT u.USER_NAME,s.SHIPMENT_NAME,s.ADDRESS,u.PHONE_NUMBER FROM shipment s INNER JOIN user u ON u.USER_ID = s.USER_ID WHERE u.USER_ID = ?;";
 
         return this.jdbcTemplate.query(getShipmentQuery,
                 (rs, rowNum) -> new GetShipmentRes(
@@ -31,7 +31,7 @@ public class ShipmentDao {
                 userIdx);
     }
     public int addShipment(int userIdx, PostShipmentReq postShipmentReq){
-        String addShipmentQuery = "insert into SHIPMENT(USER_ID,SHIPMENT_NAME,ADDRESS,ZIPCODE,CREATED_AT,UPDATED_AT,STATUS) values (?,?,?,?,DATE_FORMAT(NOW(),'%Y-%m-%d'),DATE_FORMAT(NOW(),'%Y-%m-%d'),1);";
+        String addShipmentQuery = "insert into shipment(USER_ID,SHIPMENT_NAME,ADDRESS,ZIPCODE,CREATED_AT,UPDATED_AT,STATUS) values (?,?,?,?,DATE_FORMAT(NOW(),'%Y-%m-%d'),DATE_FORMAT(NOW(),'%Y-%m-%d'),1);";
         Object[] addShipmentParams = new Object[]{
                 userIdx,
                 postShipmentReq.getShipmentName(),
@@ -39,7 +39,7 @@ public class ShipmentDao {
                 postShipmentReq.getZipcode()
                 };
         this.jdbcTemplate.update(addShipmentQuery,addShipmentParams);
-        String lastInsertIdQuery = "select SHIPMENT_ID from SHIPMENT order by SHIPMENT_ID desc limit 1;";
+        String lastInsertIdQuery = "select SHIPMENT_ID from shipment order by SHIPMENT_ID desc limit 1;";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
 }

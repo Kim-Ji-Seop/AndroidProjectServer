@@ -13,6 +13,7 @@ public class Basket {
     private int basketId;
     private int userId;
     private int productId;
+    private int sizeId;
     private int productQuantity;
     private Timestamp createdAt;
     private Timestamp updatedAt;

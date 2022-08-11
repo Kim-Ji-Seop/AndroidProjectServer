@@ -3,6 +3,7 @@ package com.example.demo.src.order;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.order.model.*;
+import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,15 +16,19 @@ public class OrderController {
     private final OrderProvider orderProvider;
     @Autowired
     private final OrderService orderService;
-    public OrderController(OrderProvider orderProvider, OrderService orderService){
+    @Autowired
+    private final JwtService jwtService;
+    public OrderController(OrderProvider orderProvider, OrderService orderService,JwtService jwtService){
         this.orderProvider = orderProvider;
         this.orderService = orderService;
+        this.jwtService = jwtService;
     }
 
     @ResponseBody
-    @PostMapping("/basket/{userIdx}")
-    public BaseResponse<List<PostOrderFromBasketRes>> doOrderFromBasket(@PathVariable("userIdx") int userIdx,@RequestBody PostOrderFromBasketReq postOrderFromBasketReq) {
+    @PostMapping("/basket")
+    public BaseResponse<List<PostOrderFromBasketRes>> doOrderFromBasket(@RequestBody PostOrderFromBasketReq postOrderFromBasketReq) {
         try{
+            int userIdx = jwtService.getUserIdx();
             List<PostOrderFromBasketRes> postOrderFromBasketRes = orderService.doOrderFromBasket(userIdx, postOrderFromBasketReq);
             return new BaseResponse<>(postOrderFromBasketRes);
         } catch(BaseException exception){
@@ -31,9 +36,10 @@ public class OrderController {
         }
     }
     @ResponseBody
-    @PostMapping("/{userIdx}")
-    public BaseResponse<PostOrderRes> doOrder(@PathVariable("userIdx") int userIdx,@RequestBody PostOrderReq postOrderReq) {
+    @PostMapping("")
+    public BaseResponse<PostOrderRes> doOrder(@RequestBody PostOrderReq postOrderReq) {
         try{
+            int userIdx = jwtService.getUserIdx();
             PostOrderRes postOrderRes = orderService.doOrder(userIdx, postOrderReq);
             return new BaseResponse<>(postOrderRes);
         } catch(BaseException exception){
@@ -42,10 +48,11 @@ public class OrderController {
     }
 
     @ResponseBody
-    @GetMapping("/{userIdx}")
-    public BaseResponse<List<GetOrderRes>> getHistory(@PathVariable("userIdx") int userIdx){
+    @GetMapping("")
+    public BaseResponse<List<GetOrderRes>> getHistory(@RequestParam(value = "cursor") int cursor){
         try{
-            List<GetOrderRes> getOrderRes = orderProvider.getHistory(userIdx);
+            int userIdx = jwtService.getUserIdx();
+            List<GetOrderRes> getOrderRes = orderProvider.getHistory(userIdx,cursor);
             return new BaseResponse<>(getOrderRes);
         }catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

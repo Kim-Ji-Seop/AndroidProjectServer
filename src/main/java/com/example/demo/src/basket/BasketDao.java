@@ -55,7 +55,7 @@ public class BasketDao {
         };
         this.jdbcTemplate.update(Query, Params);
 
-        String lastInsertIdQuery = "select BASKET_ID from BASKET order by BASKET_ID desc limit 1;";
+        String lastInsertIdQuery = "select BASKET_ID from basket order by BASKET_ID desc limit 1;";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
 }

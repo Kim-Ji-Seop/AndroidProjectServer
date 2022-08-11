@@ -7,6 +7,7 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -66,10 +67,12 @@ public class UserController {
      */
     // Path-variable
     @ResponseBody
-    @GetMapping("/{userIdx}/essential") // (GET) localhost:9001/app/users/:userIdx/essential
-    public BaseResponse<GetEssentialInfoRes> getUserEssential(@PathVariable("userIdx") int userIdx) {
+    @GetMapping("/essential") // (GET) localhost:9001/app/users/essential
+    public BaseResponse<GetEssentialInfoRes> getUserEssential(){
+
         // Get Users
         try{
+            int userIdx = jwtService.getUserIdx();
             GetEssentialInfoRes getUserRes = userProvider.getUserEssential(userIdx);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
@@ -78,9 +81,10 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/{userIdx}/additive") // (GET) localhost:9001/app/users/:userIdx/additive
-    public BaseResponse<GetAdditiveInfoRes> getUserAdditive(@PathVariable("userIdx") int userIdx) {
+    @GetMapping("/additive") // (GET) localhost:9001/app/users/additive
+    public BaseResponse<GetAdditiveInfoRes> getUserAdditive(){
         try{
+            int userIdx = jwtService.getUserIdx();
             GetAdditiveInfoRes getUserRes = userProvider.getUserAdditive(userIdx);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
@@ -119,6 +123,7 @@ public class UserController {
      */
 
     //수정필요
+    @Transactional
     @ResponseBody
     @PostMapping("/login")
     public BaseResponse<PostLoginRes> login(@RequestBody PostLoginReq postLoginReq){
@@ -139,17 +144,11 @@ public class UserController {
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/{userIdx}/inactive") //status 0으로 변경 api -> 회원탈퇴
-    public BaseResponse<String> inactiveUserStatus(@PathVariable("userIdx") int userIdx, @RequestBody User user){
+    @PatchMapping("/inactive") //status 0으로 변경 api -> 회원탈퇴
+    public BaseResponse<String> inactiveUserStatus(){
         try {
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
-            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getStatus());
-            userService.inactiveUserStatus(patchUserReq);
+            int userIdx = jwtService.getUserIdx();
+            userService.inactiveUserStatus(userIdx);
 
             String result = "회원탈퇴완료!";
             return new BaseResponse<>(result);
@@ -158,18 +157,11 @@ public class UserController {
         }
     }
     @ResponseBody
-    @PatchMapping("/{userIdx}/password") //패스워드 변경 api
-    public BaseResponse<String> modifyUserPassword(@PathVariable("userIdx") int userIdx, @RequestBody User user){
+    @PatchMapping("/password") //패스워드 변경 api
+    public BaseResponse<String> modifyUserPassword(@RequestBody PatchPwReq patchPwReq){
         try {
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
-//            //같다면 유저네임 변경
-            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getPw());
-            userService.modifyUserPassword(patchUserReq);
+            int userIdx = jwtService.getUserIdx();
+            userService.modifyUserPassword(userIdx,patchPwReq);
 
             String result = "변경완료!";
             return new BaseResponse<>(result);

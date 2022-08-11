@@ -1,18 +1,14 @@
 package com.example.demo.src.coupon.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
-
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetCouponRes {
+public class PostCouponReq {
     private String couponName;
-    private String discountInfo;
-    private String discountRate;
-    private String brandImage;
+    private String brandName;
+    private int discountRate;
 }

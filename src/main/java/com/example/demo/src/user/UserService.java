@@ -76,9 +76,9 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public void inactiveUserStatus(PatchUserReq patchUserReq) throws BaseException {
+    public void inactiveUserStatus(int userIdx) throws BaseException {
         try{
-            int result = userDao.inactiveUserStatus(patchUserReq);
+            int result = userDao.inactiveUserStatus(userIdx);
             if(result == 0){
                 throw new BaseException(MODIFY_FAIL_USERSTATUS_OFF);
             }
@@ -86,9 +86,18 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public void modifyUserPassword(PatchUserReq patchUserReq) throws BaseException {
+    public void modifyUserPassword(int userIdx,PatchPwReq patchPwReq) throws BaseException {
+        String pwd;
         try{
-            int result = userDao.modifyUserPassword(patchUserReq);
+            //암호화
+            pwd = new SHA256().encrypt(patchPwReq.getPw());
+            patchPwReq.setPw(pwd);
+
+        } catch (Exception ignored) {
+            throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+        }
+        try{
+            int result = userDao.modifyUserPassword(userIdx,patchPwReq);
             if(result == 0){
                 throw new BaseException(MODIFY_FAIL_USERPASSWORD);
             }

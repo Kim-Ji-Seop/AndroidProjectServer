@@ -2,9 +2,7 @@ package com.example.demo.src.product;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.product.model.GetGoodsRes;
-import com.example.demo.src.product.model.GetProductRes;
-import com.example.demo.src.product.model.GetSizeRes;
+import com.example.demo.src.product.model.*;
 import com.example.demo.src.user.UserProvider;
 import com.example.demo.src.user.UserService;
 import com.example.demo.src.user.model.GetUserRes;
@@ -35,11 +33,11 @@ public class ProductController {
     // Path-variable
     @ResponseBody              // (GET) localhost:9000/app/products/{divId}?category=
     @GetMapping("/{divId}") // (GET) localhost:9000/app/products/{divId}
-    public BaseResponse<List<GetProductRes>> getproducts(@PathVariable("divId") int divId,@RequestParam(value = "category",required = false) Integer categoryId) {
+    public BaseResponse<List<GetProductRes>> getproducts(@PathVariable("divId") int divId,@RequestParam(value = "category",required = false) Integer categoryId, @RequestParam(value = "page") Integer pageNum) {
 
         try{
             if(categoryId == null){
-                List<GetProductRes> getProductRes = productProvider.getProducts(divId);
+                List<GetProductRes> getProductRes = productProvider.getProducts(divId,pageNum);
                 return new BaseResponse<>(getProductRes);
             }else{
                 List<GetProductRes> getProductWithCategoryRes = productProvider.getProductsWithCategory(divId,categoryId);
@@ -49,16 +47,7 @@ public class ProductController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-    @ResponseBody
-    @GetMapping("/{divId}?category=") // (GET) 127.0.0.1:9000/app/products/{divId}
-    public BaseResponse<List<GetProductRes>> getproducts(@PathVariable("divId") int divId) {
-        try{
-            List<GetProductRes> getProductRes = productProvider.getProducts(divId);
-            return new BaseResponse<>(getProductRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
+
     @ResponseBody
     @GetMapping("/goods/{productId}")
     public BaseResponse<GetGoodsRes> getGoods(@PathVariable("productId") int productId){
@@ -76,6 +65,17 @@ public class ProductController {
         try{
             List<GetSizeRes> getSizeRes = productProvider.getSize(productId);
             return new BaseResponse<>(getSizeRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("")
+    public BaseResponse<PostProductRes> postProduct(@RequestBody PostProductReq postProductReq){
+        try{
+            PostProductRes postProductRes = productService.postProduct(postProductReq);
+            return new BaseResponse<>(postProductRes);
         }catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
