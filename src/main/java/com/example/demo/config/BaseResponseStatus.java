@@ -33,7 +33,7 @@ public enum BaseResponseStatus {
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
     POST_USERS_EXISTS_ID(false,2018,"중복된 아이디입니다."),
     POST_USERS_EXISTS_NICK_NAME(false,2019,"중복된 닉네임입니다."),
-
+    POST_USERS_NOT_FOUND(false,2021,"가입하지 않은 회원입니다."),
 
     /**
      * 3000 : Response 오류
@@ -44,7 +44,7 @@ public enum BaseResponseStatus {
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
-
+    FAILED_TO_LOGIN_PASSWORD(false,3015,"비밀번호가 틀렸습니다."),
 
 
     /**

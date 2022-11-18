@@ -3,20 +3,16 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.config.secret.Secret;
 import com.example.demo.src.user.model.*;
+import com.example.demo.utils.AES128;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -46,12 +42,13 @@ public class UserService {
         if(userProvider.checkId(postUserReq.getId()) ==1){
             throw new BaseException(POST_USERS_EXISTS_ID); // 2018 : 중복 아이디
         }
+        // 중복 닉네임 체크
         if(userProvider.checkNickname(postUserReq.getNickName())==1){
             throw new BaseException(POST_USERS_EXISTS_NICK_NAME); // 2019 : 중복 닉네임
         }
         try{
             // 비밀번호 암호화
-            pwd = new SHA256().encrypt(postUserReq.getPw());
+            pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getPw()); // 비밀번호 암호화
             postUserReq.setPw(pwd);
 
         } catch (Exception ignored) {
@@ -90,18 +87,6 @@ public class UserService {
             int result = userDao.modifyUserPassword(userIdx,patchPwReq);
             if(result == 0){
                 throw new BaseException(MODIFY_FAIL_USERPASSWORD);
-            }
-        } catch(Exception exception){
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
-    //수정필요
-   public void loginUserStatusOn(PostLoginReq postLoginReq) throws BaseException {
-        try{
-            int result = userDao.loginUserStatusOn(postLoginReq);
-            if(result == 0){
-                throw new BaseException(MODIFY_FAIL_USERSTATUS_ON);
             }
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);

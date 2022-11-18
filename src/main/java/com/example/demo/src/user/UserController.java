@@ -7,7 +7,6 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -123,8 +122,6 @@ public class UserController {
      * [POST] /users/login
      * @return BaseResponse<PostLoginRes>
      */
-
-    //수정필요
     @ResponseBody
     @PostMapping("/login")
     public BaseResponse<PostLoginRes> login(@RequestBody PostLoginReq postLoginReq){
@@ -132,7 +129,7 @@ public class UserController {
             if(postLoginReq.getId().length() == 0 || postLoginReq.getPw().length() == 0){
                 return new BaseResponse<>(REQUEST_ERROR); // 2000 : 입력값 전체가 빈 값일 때
             }
-            userService.loginUserStatusOn(postLoginReq);
+            userProvider.login(postLoginReq);
             PostLoginRes postLoginRes = userProvider.login(postLoginReq);
             return new BaseResponse<>(postLoginRes);
         } catch (BaseException exception){

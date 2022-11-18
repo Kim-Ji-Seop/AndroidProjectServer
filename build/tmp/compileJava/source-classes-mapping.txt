@@ -1,5 +1,3 @@
-com/example/demo/src/brand/BrandProvider.java
- com.example.demo.src.brand.BrandProvider
 com/example/demo/src/coupon/CouponService.java
  com.example.demo.src.coupon.CouponService
 com/example/demo/config/Constant.java
@@ -12,21 +10,10 @@ com/example/demo/utils/ValidationRegex.java
  com.example.demo.utils.ValidationRegex
 com/example/demo/src/shipment/ShipmentProvider.java
  com.example.demo.src.shipment.ShipmentProvider
-<<<<<<< Updated upstream
-com/example/demo/src/brand/BrandService.java
- com.example.demo.src.brand.BrandService
 com/example/demo/src/coupon/model/PostCouponIndividualReq.java
  com.example.demo.src.coupon.model.PostCouponIndividualReq
 com/example/demo/src/user/model/GetEssentialInfoRes.java
  com.example.demo.src.user.model.GetEssentialInfoRes
-=======
-com/example/demo/src/user/model/GetEssentialInfoRes.java
- com.example.demo.src.user.model.GetEssentialInfoRes
-com/example/demo/src/coupon/model/PostCouponIndividualReq.java
- com.example.demo.src.coupon.model.PostCouponIndividualReq
-com/example/demo/src/brand/BrandService.java
- com.example.demo.src.brand.BrandService
->>>>>>> Stashed changes
 com/example/demo/src/product/model/GetTopSizeRes.java
  com.example.demo.src.product.model.GetTopSizeRes
 com/example/demo/config/BaseResponseStatus.java
@@ -41,23 +28,18 @@ com/example/demo/src/coupon/model/PostCouponRes.java
  com.example.demo.src.coupon.model.PostCouponRes
 com/example/demo/src/shipment/model/PostShipmentRes.java
  com.example.demo.src.shipment.model.PostShipmentRes
-com/example/demo/src/basket/BasketController.java
- com.example.demo.src.basket.BasketController
+com/example/demo/DemoApplication.java
+ com.example.demo.DemoApplication
 com/example/demo/src/user/model/GetAdditiveInfoRes.java
  com.example.demo.src.user.model.GetAdditiveInfoRes
 com/example/demo/src/product/ProductDao.java
  com.example.demo.src.product.ProductDao
 com/example/demo/src/product/model/Category.java
  com.example.demo.src.product.model.Category
-com/example/demo/src/order/model/PostOrderFromBasketReq.java
- com.example.demo.src.order.model.PostOrderFromBasketReq
 com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
-<<<<<<< Updated upstream
 com/example/demo/src/order/model/PostOrderFromBasketReq.java
  com.example.demo.src.order.model.PostOrderFromBasketReq
-=======
->>>>>>> Stashed changes
 com/example/demo/src/product/model/GetPantsSizeRes.java
  com.example.demo.src.product.model.GetPantsSizeRes
 com/example/demo/src/user/model/PostUserRes.java
@@ -68,23 +50,14 @@ com/example/demo/src/shipment/model/Shipment.java
  com.example.demo.src.shipment.model.Shipment
 com/example/demo/src/order/model/Order.java
  com.example.demo.src.order.model.Order
-com/example/demo/src/brand/BrandDao.java
- com.example.demo.src.brand.BrandDao
-com/example/demo/src/user/UserService.java
- com.example.demo.src.user.UserService
+com/example/demo/src/user/model/PatchPwReq.java
+ com.example.demo.src.user.model.PatchPwReq
 com/example/demo/src/product/model/PostProductRes.java
  com.example.demo.src.product.model.PostProductRes
-<<<<<<< Updated upstream
 com/example/demo/src/basket/model/GetBasketRes.java
  com.example.demo.src.basket.model.GetBasketRes
 com/example/demo/src/product/ProductController.java
  com.example.demo.src.product.ProductController
-=======
-com/example/demo/src/product/ProductController.java
- com.example.demo.src.product.ProductController
-com/example/demo/src/basket/model/GetBasketRes.java
- com.example.demo.src.basket.model.GetBasketRes
->>>>>>> Stashed changes
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
 com/example/demo/src/product/model/GetGoodsRes.java
@@ -99,42 +72,30 @@ com/example/demo/utils/SHA256.java
  com.example.demo.utils.SHA256
 com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
-com/example/demo/src/shipment/ShipmentService.java
- com.example.demo.src.shipment.ShipmentService
+com/example/demo/src/basket/model/PostBasketProductReq.java
+ com.example.demo.src.basket.model.PostBasketProductReq
 com/example/demo/src/order/model/PostOrderFromBasketRes.java
  com.example.demo.src.order.model.PostOrderFromBasketRes
 com/example/demo/src/product/model/ProductSize.java
  com.example.demo.src.product.model.ProductSize
 com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
-<<<<<<< Updated upstream
 com/example/demo/src/basket/BasketProvider.java
  com.example.demo.src.basket.BasketProvider
-com/example/demo/src/brand/BrandController.java
- com.example.demo.src.brand.BrandController
-=======
->>>>>>> Stashed changes
 com/example/demo/src/product/model/ProductDiv.java
  com.example.demo.src.product.model.ProductDiv
-com/example/demo/src/basket/BasketProvider.java
- com.example.demo.src.basket.BasketProvider
-com/example/demo/src/brand/BrandController.java
- com.example.demo.src.brand.BrandController
-com/example/demo/src/product/model/ProductStock.java
- com.example.demo.src.product.model.ProductStock
 com/example/demo/src/brand/model/Brand.java
  com.example.demo.src.brand.model.Brand
-com/example/demo/src/user/UserDao.java
- com.example.demo.src.user.UserDao
+com/example/demo/src/product/model/ProductStock.java
+ com.example.demo.src.product.model.ProductStock
 com/example/demo/src/coupon/model/Coupon.java
  com.example.demo.src.coupon.model.Coupon
-<<<<<<< Updated upstream
 com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
-=======
->>>>>>> Stashed changes
 com/example/demo/src/shipment/ShipmentDao.java
  com.example.demo.src.shipment.ShipmentDao
+com/example/demo/utils/AES128.java
+ com.example.demo.utils.AES128
 com/example/demo/src/user/model/PatchUserReq.java
  com.example.demo.src.user.model.PatchUserReq
 com/example/demo/src/product/model/GetSizeRes.java
@@ -153,88 +114,47 @@ com/example/demo/src/coupon/model/GetCouponIndividualRes.java
  com.example.demo.src.coupon.model.GetCouponIndividualRes
 com/example/demo/src/product/model/Product.java
  com.example.demo.src.product.model.Product
-<<<<<<< Updated upstream
-=======
-com/example/demo/src/coupon/model/GetCouponIndividualRes.java
- com.example.demo.src.coupon.model.GetCouponIndividualRes
-com/example/demo/src/coupon/model/PostCouponIndividualRes.java
- com.example.demo.src.coupon.model.PostCouponIndividualRes
->>>>>>> Stashed changes
 com/example/demo/src/coupon/CouponDao.java
  com.example.demo.src.coupon.CouponDao
-com/example/demo/src/user/UserController.java
- com.example.demo.src.user.UserController
-<<<<<<< Updated upstream
+com/example/demo/src/coupon/CouponProvider.java
+ com.example.demo.src.coupon.CouponProvider
 com/example/demo/src/basket/BasketDao.java
  com.example.demo.src.basket.BasketDao
 com/example/demo/src/shipment/model/GetShipmentRes.java
  com.example.demo.src.shipment.model.GetShipmentRes
-=======
-com/example/demo/src/shipment/model/GetShipmentRes.java
- com.example.demo.src.shipment.model.GetShipmentRes
-com/example/demo/src/basket/BasketDao.java
- com.example.demo.src.basket.BasketDao
->>>>>>> Stashed changes
-com/example/demo/src/order/OrderController.java
- com.example.demo.src.order.OrderController
+com/example/demo/src/user/model/GetUserRes.java
+ com.example.demo.src.user.model.GetUserRes
 com/example/demo/src/product/model/PostProductReq.java
  com.example.demo.src.product.model.PostProductReq
-com/example/demo/src/coupon/CouponController.java
- com.example.demo.src.coupon.CouponController
-<<<<<<< Updated upstream
+com/example/demo/src/basket/model/Basket.java
+ com.example.demo.src.basket.model.Basket
 com/example/demo/src/coupon/model/PostCouponReq.java
  com.example.demo.src.coupon.model.PostCouponReq
 com/example/demo/src/shipment/model/PostShipmentReq.java
  com.example.demo.src.shipment.model.PostShipmentReq
-=======
->>>>>>> Stashed changes
 com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
-com/example/demo/src/shipment/model/PostShipmentReq.java
- com.example.demo.src.shipment.model.PostShipmentReq
-com/example/demo/src/coupon/model/PostCouponReq.java
- com.example.demo.src.coupon.model.PostCouponReq
 com/example/demo/src/product/model/GetProductRes.java
  com.example.demo.src.product.model.GetProductRes
 com/example/demo/src/order/model/PostOrderReq.java
  com.example.demo.src.order.model.PostOrderReq
-<<<<<<< Updated upstream
 com/example/demo/src/basket/BasketService.java
  com.example.demo.src.basket.BasketService
+com/example/demo/src/coupon/CouponController.java
+ com.example.demo.src.coupon.CouponController
+com/example/demo/src/basket/BasketController.java
+ com.example.demo.src.basket.BasketController
+com/example/demo/src/shipment/ShipmentService.java
+ com.example.demo.src.shipment.ShipmentService
 com/example/demo/src/shipment/ShipmentController.java
  com.example.demo.src.shipment.ShipmentController
-com/example/demo/src/user/model/GetUserRes.java
- com.example.demo.src.user.model.GetUserRes
-=======
-com/example/demo/src/user/model/GetUserRes.java
- com.example.demo.src.user.model.GetUserRes
-com/example/demo/src/shipment/ShipmentController.java
- com.example.demo.src.shipment.ShipmentController
-com/example/demo/src/basket/BasketService.java
- com.example.demo.src.basket.BasketService
->>>>>>> Stashed changes
-com/example/demo/DemoApplication.java
- com.example.demo.DemoApplication
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
-<<<<<<< Updated upstream
-com/example/demo/src/coupon/CouponProvider.java
- com.example.demo.src.coupon.CouponProvider
+com/example/demo/src/order/OrderController.java
+ com.example.demo.src.order.OrderController
+com/example/demo/src/user/UserService.java
+ com.example.demo.src.user.UserService
+com/example/demo/src/user/UserController.java
+ com.example.demo.src.user.UserController
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
-com/example/demo/src/basket/model/PostBasketProductReq.java
- com.example.demo.src.basket.model.PostBasketProductReq
-com/example/demo/src/user/model/PatchPwReq.java
- com.example.demo.src.user.model.PatchPwReq
-=======
-com/example/demo/src/user/UserProvider.java
- com.example.demo.src.user.UserProvider
-com/example/demo/src/coupon/CouponProvider.java
- com.example.demo.src.coupon.CouponProvider
-com/example/demo/src/user/model/PatchPwReq.java
- com.example.demo.src.user.model.PatchPwReq
-com/example/demo/src/basket/model/PostBasketProductReq.java
- com.example.demo.src.basket.model.PostBasketProductReq
->>>>>>> Stashed changes
-com/example/demo/src/basket/model/Basket.java
- com.example.demo.src.basket.model.Basket
