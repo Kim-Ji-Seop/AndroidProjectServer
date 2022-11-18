@@ -82,35 +82,33 @@ public class UserDao {
 // createUser -> 회원가입 메소드
 // checkEmail -> 중복이메일검사 메소드
     public int createUser(PostUserReq postUserReq){
-        String createUserQuery = "insert into USER (ID,PW,USER_NAME,EMAIL,PHONE_NUMBER,BIRTH,SEX,LOGIN_KAKAO,INTRODUCE,CREATED_AT,UPDATED_AT,STATUS) VALUES (?,?,?,?,?,?,?,?,?,NOW(),NOW(),1)";
+        String createUserQuery = "insert into user (userID,password,nickname,department,grade) values (?,?,?,?,?)";
         Object[] createUserParams = new Object[]{
                                                 postUserReq.getId(),
                                                 postUserReq.getPw(),
-                                                postUserReq.getUserName(),
-                                                postUserReq.getEmail(),
-                                                postUserReq.getPhoneNumber(),
-                                                postUserReq.getBirth(),
-                                                postUserReq.getSex(),
-                                                postUserReq.getLoginKakao(),
-                                                postUserReq.getIntroduce(),
+                                                postUserReq.getNickName(),
+                                                postUserReq.getDepartment(),
+                                                postUserReq.getGrade()
                                                 };
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
-        String lastInsertIdQuery = "select USER_ID from USER order by USER_ID desc limit 1;";
+        String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
-    public int checkId(String id){
-        String checkIdQuery = "select exists(select ID from USER where ID = ?)";
+
+    // 회원가입 아이디 중복 확인
+    public int checkId(String userID){
+        String checkIdQuery = "select exists(select id from user where userID = ? and status = 'A')";
         return this.jdbcTemplate.queryForObject(checkIdQuery,
                 int.class,
-                id);
+                userID);
     }
-    public int checkEmail(String email){
-        String checkEmailQuery = "select exists(select EMAIL from USER where EMAIL = ?)";
-        String checkEmailParams = email;
-        return this.jdbcTemplate.queryForObject(checkEmailQuery,
+
+    public int checkNickname(String nickName){
+        String checkIdQuery = "select exists(select id from user where nickname = ? and status = 'A')";
+        return this.jdbcTemplate.queryForObject(checkIdQuery,
                 int.class,
-                checkEmailParams);
+                nickName);
     }
 
     public int inactiveUserStatus(int userIdx){

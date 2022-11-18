@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import static com.example.demo.config.BaseResponseStatus.*;
-import static com.example.demo.utils.ValidationRegex.isRegexEmail;
+import static com.example.demo.utils.ValidationRegex.*;
 
 @RestController
 @RequestMapping("/app/users")
@@ -35,13 +35,38 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
-
+    /**
+     * 회원가입 API
+     * [POST] /users
+     * @return BaseResponse<PostUserRes>
+     */
+    // Body
     @ResponseBody
-    @GetMapping("/kakao")
-    public void  kakaoCallback(@RequestParam String code) throws BaseException {
-        String access_token = userService.getKaKaoAccessToken(code);
-        userService.createKakaoUser(access_token);
+    @PostMapping("")
+    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
+        try{
+            if(postUserReq.getId().length() == 0 || postUserReq.getPw().length() == 0 || postUserReq.getNickName().length() == 0){
+                return new BaseResponse<>(REQUEST_ERROR); // 2000 : 입력값 전체가 빈 값일 때
+            }
+            if(!isRegexPassword(postUserReq.getPw())){
+                return new BaseResponse<>(POST_USERS_INVALID_PASSWORD); // 2011 : 비밀번호 기본 표현식 예외
+            }
+            if(!isRegexNickName(postUserReq.getNickName())){
+                return new BaseResponse<>(POST_USERS_INVALID_NICK_NAME); // 2012 : 닉네임 기본 표현식 예외
+            }
+            PostUserRes postUserRes = userService.createUser(postUserReq);
+            return new BaseResponse<>(postUserRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
     }
+
+//    @ResponseBody
+//    @GetMapping("/kakao")
+//    public void  kakaoCallback(@RequestParam String code) throws BaseException {
+//        String access_token = userService.getKaKaoAccessToken(code);
+//        userService.createKakaoUser(access_token);
+//    }
 //-----------------------------------------------------------------------------------------------
     /**
      * 회원 1명 조회 API
@@ -49,22 +74,23 @@ public class UserController {
      * @return BaseResponse<GetUserRes>
      */
     // Path-variable
-    @ResponseBody
-    @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/app/users/:userIdx
-    public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) {
-        // Get Users
-        try{
-            GetUserRes getUserRes = userProvider.getUser(userIdx);
-            return new BaseResponse<>(getUserRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
+//    @ResponseBody
+//    @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/app/users/:userIdx
+//    public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) {
+//        // Get Users
+//        try{
+//            GetUserRes getUserRes = userProvider.getUser(userIdx);
+//            return new BaseResponse<>(getUserRes);
+//        } catch(BaseException exception){
+//            return new BaseResponse<>((exception.getStatus()));
+//        }
+//    }
     /**
      * 회원 1명 필수정보 조회 API
      * [GET] /users/:userIdx/essential
      * @return BaseResponse<GetUserRes>
      */
+
     // Path-variable
     @ResponseBody
     @GetMapping("/essential") // (GET) localhost:9001/app/users/essential
@@ -93,43 +119,19 @@ public class UserController {
     }
 
     /**
-     * 회원가입 API
-     * [POST] /users
-     * @return BaseResponse<PostUserRes>
-     */
-    // Body
-    @ResponseBody
-    @PostMapping("")
-    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
-        // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-        if(postUserReq.getEmail() == null){
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }
-        //이메일 정규표현
-        if(!isRegexEmail(postUserReq.getEmail())){
-            return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
-        }
-        try{
-            PostUserRes postUserRes = userService.createUser(postUserReq);
-            return new BaseResponse<>(postUserRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
-    /**
      * 로그인 API
      * [POST] /users/login
      * @return BaseResponse<PostLoginRes>
      */
 
     //수정필요
-    @Transactional
     @ResponseBody
     @PostMapping("/login")
     public BaseResponse<PostLoginRes> login(@RequestBody PostLoginReq postLoginReq){
         try{
-            // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
-            // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
+            if(postLoginReq.getId().length() == 0 || postLoginReq.getPw().length() == 0){
+                return new BaseResponse<>(REQUEST_ERROR); // 2000 : 입력값 전체가 빈 값일 때
+            }
             userService.loginUserStatusOn(postLoginReq);
             PostLoginRes postLoginRes = userProvider.login(postLoginReq);
             return new BaseResponse<>(postLoginRes);

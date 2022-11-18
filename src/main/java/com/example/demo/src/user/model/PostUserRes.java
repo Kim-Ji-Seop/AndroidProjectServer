@@ -12,13 +12,4 @@ import java.sql.Date;
 public class PostUserRes {
     private String jwt;
     private int userId;
-    private String id;
-    private String pw;
-    private String userName;
-    private String email;
-    private String phoneNumber;
-    private Date birth;
-    private String sex;
-    private int loginKakao;
-    private String introduce;
 }
