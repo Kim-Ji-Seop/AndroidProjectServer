@@ -6,7 +6,7 @@ spring:
     name: demo
   datasource:
     platform: mysql
-    url: jdbc:mysql://database-1.crqlyooh7jfa.ap-northeast-2.rds.amazonaws.com/term_DB?autoReconnect=true&serverTimezone=UTC
+    url: jdbc:mysql://database-1.crqlyooh7jfa.ap-northeast-2.rds.amazonaws.com/term_project?autoReconnect=true&serverTimezone=UTC
     username: admin
     password: JiseopKim1031
     driver-class-name: com.mysql.cj.jdbc.Driver
