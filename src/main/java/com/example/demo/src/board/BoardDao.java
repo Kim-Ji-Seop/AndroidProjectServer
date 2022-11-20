@@ -18,12 +18,11 @@ public class BoardDao {
     }
 
     public List<GetExamSubjectListRes> getExamSubjectList(int userIdx){
-        String query = "select id,title,content,date_format(endAt, '%m/%d') as endAt from exam_sub_board where status='A' and userIdx = ?";
+        String query = "select id,title,date_format(endAt, '%m/%d') as endAt from exam_sub_board where status='A' and userIdx = ?";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetExamSubjectListRes(
                         rs.getInt("id"),
                         rs.getString("title"),
-                        rs.getString("content"),
                         rs.getString("endAt")
                 ),userIdx);
     }

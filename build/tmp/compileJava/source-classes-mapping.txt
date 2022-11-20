@@ -34,8 +34,8 @@ com/example/demo/src/user/model/GetAdditiveInfoRes.java
  com.example.demo.src.user.model.GetAdditiveInfoRes
 com/example/demo/utils/AES128.java
  com.example.demo.utils.AES128
-com/example/demo/src/board/BoardDao.java
- com.example.demo.src.board.BoardDao
+com/example/demo/src/user/UserController.java
+ com.example.demo.src.user.UserController
 com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
 com/example/demo/src/test/TestController.java
@@ -46,17 +46,17 @@ com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
 com/example/demo/src/board/BoardService.java
  com.example.demo.src.board.BoardService
-com/example/demo/src/board/model/GetExamSubjectListRes.java
- com.example.demo.src.board.model.GetExamSubjectListRes
-com/example/demo/src/board/BoardProvider.java
- com.example.demo.src.board.BoardProvider
-com/example/demo/src/user/UserService.java
- com.example.demo.src.user.UserService
-com/example/demo/utils/JwtService.java
- com.example.demo.utils.JwtService
-com/example/demo/src/user/UserController.java
- com.example.demo.src.user.UserController
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
+com/example/demo/utils/JwtService.java
+ com.example.demo.utils.JwtService
+com/example/demo/src/user/UserService.java
+ com.example.demo.src.user.UserService
+com/example/demo/src/board/BoardProvider.java
+ com.example.demo.src.board.BoardProvider
+com/example/demo/src/board/model/GetExamSubjectListRes.java
+ com.example.demo.src.board.model.GetExamSubjectListRes
+com/example/demo/src/board/BoardDao.java
+ com.example.demo.src.board.BoardDao
 com/example/demo/src/board/BoardController.java
  com.example.demo.src.board.BoardController

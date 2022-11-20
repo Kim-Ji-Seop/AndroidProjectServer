@@ -10,6 +10,5 @@ import lombok.Setter;
 public class GetExamSubjectListRes {
     private int id;
     private String title;
-    private String content;
     private String endAt;
 }
