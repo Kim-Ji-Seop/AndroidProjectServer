@@ -11,8 +11,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.util.List;
-import java.util.Locale;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -25,30 +23,6 @@ public class UserDao {
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-
-
-//    public List<GetUserRes> getUsersByEmail(String email){
-//        String getUsersByEmailQuery = "select * from USER where EMAIL =?";
-//        String getUsersByEmailParams = email;
-//        return this.jdbcTemplate.query(getUsersByEmailQuery,
-//                (rs, rowNum) -> new GetUserRes(
-//                        rs.getInt("USER_ID"),
-//                        rs.getString("ID"),
-//                        rs.getString("PW"),
-//                        rs.getString("USER_NAME"),
-//                        rs.getString("EMAIL"),
-//                        rs.getString("PHONE_NUMBER"),
-//                        rs.getDate("BIRTH"),
-//                        rs.getString("SEX"),
-//                        rs.getString("ACCOUNT"),
-//                        rs.getString("ADDRESS"),
-//                        rs.getInt("LOGIN_KAKAO"),
-//                        rs.getString("INTRODUCE"),
-//                        rs.getTimestamp("CREATED_AT"),
-//                        rs.getTimestamp("UPDATED_AT"),
-//                        rs.getInt("STATUS")),
-//                getUsersByEmailParams);
-//    }
 
     public GetUserRes getUser(int userIdx){
         String getUserQuery = "select * from USER where USER_ID = ?";
@@ -202,10 +176,4 @@ public class UserDao {
                 int.class,
                 postLoginReq.getId(),pwdParams);
     }
-//    //수정필요
-//    public int loginUserStatusOn(PostLoginReq postLoginReq){
-//        String modifyUserPasswordQuery = "update USER set STATUS = 1 where ID = ?";
-//        Object[] modifyUserPasswordParams = new Object[]{postLoginReq.getId()};
-//        return this.jdbcTemplate.update(modifyUserPasswordQuery,modifyUserPasswordParams);
-//    }
 }
