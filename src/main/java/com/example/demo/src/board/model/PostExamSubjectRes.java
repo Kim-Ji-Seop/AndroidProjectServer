@@ -9,7 +9,7 @@ import java.sql.Date;
 @Setter
 @AllArgsConstructor
 public class PostExamSubjectRes {
-    private int boardIdx;
+    private int listIdx;
     private int userIdx;
     private String title;
     private String content;
