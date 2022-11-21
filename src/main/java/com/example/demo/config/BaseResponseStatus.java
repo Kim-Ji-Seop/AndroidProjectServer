@@ -34,7 +34,10 @@ public enum BaseResponseStatus {
     POST_USERS_EXISTS_ID(false,2018,"중복된 아이디입니다."),
     POST_USERS_EXISTS_NICK_NAME(false,2019,"중복된 닉네임입니다."),
     POST_USERS_NOT_FOUND(false,2021,"가입하지 않은 회원입니다."),
-
+    // 시험과제게시판 등록
+    POST_EXAM_SUB_TITLE_ISEMPTY(false,2022,"제목을 등록해주세요."),
+    // 시험과제게시판 수정
+    PATCH_EXAM_SUB_TITLE_ISEMPTY(false,2023,"제목을 등록해주세요."),
     /**
      * 3000 : Response 오류
      */
