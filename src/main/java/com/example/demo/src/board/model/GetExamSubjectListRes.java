@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
 public class GetExamSubjectListRes {
     private int id;
     private String title;
-    private String endAt;
+    private Date endAt;
 }

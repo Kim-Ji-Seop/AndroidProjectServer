@@ -44,8 +44,8 @@ com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
 com/example/demo/src/board/model/PatchExamSubjectRes.java
  com.example.demo.src.board.model.PatchExamSubjectRes
-com/example/demo/src/board/model/GetExamSubjectListRes.java
- com.example.demo.src.board.model.GetExamSubjectListRes
+com/example/demo/src/board/model/PostExamSubjectReq.java
+ com.example.demo.src.board.model.PostExamSubjectReq
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
 com/example/demo/src/user/UserDao.java
@@ -62,10 +62,10 @@ com/example/demo/src/board/model/PostExamSubjectRes.java
  com.example.demo.src.board.model.PostExamSubjectRes
 com/example/demo/src/board/BoardProvider.java
  com.example.demo.src.board.BoardProvider
+com/example/demo/src/board/model/GetExamSubjectListRes.java
+ com.example.demo.src.board.model.GetExamSubjectListRes
 com/example/demo/src/board/BoardService.java
  com.example.demo.src.board.BoardService
-com/example/demo/src/board/model/PostExamSubjectReq.java
- com.example.demo.src.board.model.PostExamSubjectReq
 com/example/demo/src/board/BoardDao.java
  com.example.demo.src.board.BoardDao
 com/example/demo/src/board/BoardController.java
