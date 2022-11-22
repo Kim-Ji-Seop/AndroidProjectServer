@@ -12,5 +12,6 @@ import java.sql.Date;
 public class GetExamSubjectListRes {
     private int id;
     private String title;
+    private String content;
     private Date endAt;
 }
