@@ -68,10 +68,11 @@ public class BoardDao {
         this.jdbcTemplate.update(query, params);
 
         // 방금 수정한 정보 조회
-        String responseQuery = "select id,title,content,endAt from exam_sub_board where id=? and userIdx=?";
+        String responseQuery = "select id,userIdx,title,content,endAt from exam_sub_board where id=? and userIdx=?";
         return this.jdbcTemplate.queryForObject(responseQuery,
                 (rs, rowNum) -> new PatchExamSubjectRes(
                         rs.getInt("id"),
+                        rs.getInt("userIdx"),
                         rs.getString("title"),
                         rs.getString("content"),
                         rs.getDate("endAt")),

@@ -11,6 +11,7 @@ import java.sql.Date;
 @AllArgsConstructor
 public class PatchExamSubjectRes {
     private int listIdx;
+    private int userIdx;
     private String title;
     private String content;
     private Date endAt;
