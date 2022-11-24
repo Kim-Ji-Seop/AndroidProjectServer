@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PatchDeleteExamSubjectRes {
-    private int listIdx;
-    private String status;
+public class PostEvaluateSubjectReviewRes {
+    private String content;
+    private float score;
 }

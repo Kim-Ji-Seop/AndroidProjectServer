@@ -35,7 +35,7 @@ public class BoardController {
     /**
      *  시험과제게시판 목록 조회API
      * [GET] /exam-subjects
-     * @return BaseResponse<PostUserRes>
+     * @return BaseResponse<List<GetExamSubjectListRes>>
      */
     @ResponseBody
     @GetMapping("/exam-subjects") // (GET) www.seop.site/app/board/exam-subjects
@@ -43,8 +43,8 @@ public class BoardController {
         // Get Users
         try{
             int userIdx = jwtService.getUserIdx();
-            List<GetExamSubjectListRes> getEssentialInfoRes = boardProvider.getExamSubjectList(userIdx);
-            return new BaseResponse<>(getEssentialInfoRes);
+            List<GetExamSubjectListRes> getExamSubjectListRes = boardProvider.getExamSubjectList(userIdx);
+            return new BaseResponse<>(getExamSubjectListRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -96,7 +96,7 @@ public class BoardController {
     /**
      *  시험/과제 게시판 - 시험/과제 삭제 API
      * [PATCH] /exam-subjects/del/:listIdx
-     * @return BaseResponse<PatchExamSubjectRes>
+     * @return BaseResponse<PatchDeleteExamSubjectRes>
      */
     @ResponseBody
     @PatchMapping ("/exam-subjects/del/{listIdx}") // (PATCH) www.seop.site/app/board/exam-subjects/del/:listIdx
@@ -106,6 +106,68 @@ public class BoardController {
             PatchDeleteExamSubjectRes deleteExamSubjectRes = boardService.deleteExamSubject(userIdx,listIdx);
             return new BaseResponse<>(deleteExamSubjectRes);
         }catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     *  과목평가 게시판 - 과목평가 조회 API
+     * [GET] /evaluation-subjects
+     * @return BaseResponse<List<GetEvaluateSubjectRes>>
+     */
+    @ResponseBody
+    @GetMapping("/evaluation-subjects") // (GET) www.seop.site/app/board/evaluation-subjects
+    public BaseResponse<List<GetEvaluateSubjectRes>> getEvaluateSubjectList(@RequestParam Integer grade){
+        try{
+            List<GetEvaluateSubjectRes> getEvaluateSubjectRes = boardProvider.getEvaluateSubjectList(grade);
+            return new BaseResponse<>(getEvaluateSubjectRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     *  과목평가 게시판 - 평점보기 조회 API
+     * [GET] /evaluation-subjects/:subjectIdx
+     * @return BaseResponse<GetEvaluateSubjectOneRes>
+     */
+    @ResponseBody
+    @GetMapping("/evaluation-subjects/{subjectIdx}") // (GET) www.seop.site/app/board/evaluation-subjects/:subjectIdx
+    public BaseResponse<GetEvaluateSubjectOneRes> getEvaluateSubject(@PathVariable("subjectIdx") int subjectIdx){
+        try{
+            GetEvaluateSubjectOneRes getEvaluateSubjectOneRes = boardProvider.getEvaluateSubject(subjectIdx);
+            return new BaseResponse<>(getEvaluateSubjectOneRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     *  과목평가 게시판 - 평점보기 조회 API
+     * [GET] /evaluation-subjects/reviews/:subjectIdx
+     * @return BaseResponse<List<GetEvaluateSubjectReviewRes>>
+     */
+    @ResponseBody
+    @GetMapping("/evaluation-subjects/reviews/{subjectIdx}") // (GET) www.seop.site/app/board/evaluation-subjects/reviews/:subjectIdx
+    public BaseResponse<List<GetEvaluateSubjectReviewRes>> getEvaluateSubjectReviews(@PathVariable("subjectIdx") int subjectIdx){
+        try{
+            List<GetEvaluateSubjectReviewRes> getEvaluateSubjectReviewResList = boardProvider.getEvaluateSubjectReviews(subjectIdx);
+            return new BaseResponse<>(getEvaluateSubjectReviewResList);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     *  과목평가 게시판 - 평가하기 API
+     * [POST] /evaluation-subjects/reviews/:subjectIdx
+     * @return BaseResponse<PostEvaluateSubjectReviewRes>
+     */
+    @ResponseBody
+    @PostMapping("/evaluation-subjects/reviews/{subjectIdx}") // (POST) www.seop.site/app/board/evaluation-subjects/reviews/:subjectIdx
+    public BaseResponse<PostEvaluateSubjectReviewRes> createEvaluateSubjectReview(@PathVariable("subjectIdx") int subjectIdx,@RequestBody PostEvaluateSubjectReviewReq postEvaluateSubjectReviewReq){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            PostEvaluateSubjectReviewRes postEvaluateSubjectReviewRes = boardService.createEvaluateSubjectReview(userIdx,subjectIdx,postEvaluateSubjectReviewReq);
+            return new BaseResponse<>(postEvaluateSubjectReviewRes);
+        } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
     }

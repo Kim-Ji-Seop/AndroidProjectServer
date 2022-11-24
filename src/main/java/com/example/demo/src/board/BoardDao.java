@@ -92,4 +92,88 @@ public class BoardDao {
                         rs.getString("status")),
                 listIdx,userIdx);
     }
+
+    // 전체학년 과목 조회
+    public List<GetEvaluateSubjectRes> getEvaluateSubjectAllList() {
+        String query =
+                "select id,grade,subjectName,professor\n" +
+                "from evaluate_sub_board\n" +
+                "where status = 'A'";
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetEvaluateSubjectRes(
+                        rs.getInt("id"),
+                        rs.getInt("grade"),
+                        rs.getString("subjectName"),
+                        rs.getString("professor")
+                )
+        );
+
+    }
+
+    // 학년별 과목 조회
+    public List<GetEvaluateSubjectRes> getEvaluateSubjectGradeList(Integer grade) {
+        String query =
+                "select id,grade,subjectName,professor\n" +
+                        "from evaluate_sub_board\n" +
+                        "where status = 'A' and grade = ?";
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetEvaluateSubjectRes(
+                        rs.getInt("id"),
+                        rs.getInt("grade"),
+                        rs.getString("subjectName"),
+                        rs.getString("professor")
+                ), grade);
+    }
+
+    public GetEvaluateSubjectOneRes getEvaluateSubject(int subjectIdx) {
+        String query =
+                "select esb.id as id,esb.grade as grade,esb.subjectName as subjectName,esb.professor as professor,round(avg(score),1) as scoreAverage\n" +
+                "from sub_review\n" +
+                "inner join evaluate_sub_board esb on sub_review.subjectID = esb.id\n" +
+                "where esb.id = ?";
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new GetEvaluateSubjectOneRes(
+                        rs.getInt("id"),
+                        rs.getInt("grade"),
+                        rs.getString("subjectName"),
+                        rs.getString("professor"),
+                        rs.getFloat("scoreAverage")
+                ),subjectIdx);
+    }
+
+    public List<GetEvaluateSubjectReviewRes> getEvaluateSubjectReviews(int subjectIdx) {
+        String query =
+                "select content,score\n" +
+                        "from sub_review\n" +
+                        "inner join evaluate_sub_board esb on sub_review.subjectID = esb.id\n" +
+                        "where esb.id = ?";
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetEvaluateSubjectReviewRes(
+                        rs.getString("content"),
+                        rs.getFloat("score")
+                ),subjectIdx);
+    }
+
+    @Transactional(rollbackFor = {Exception.class})
+    public PostEvaluateSubjectReviewRes createEvaluateSubjectReview(int userIdx, int subjectIdx, PostEvaluateSubjectReviewReq postEvaluateSubjectReviewReq) {
+        String query = "insert into sub_review (content,userIdx,subjectID,score) values (?,?,?,?)";
+        Object[] params = new Object[]{
+                postEvaluateSubjectReviewReq.getContent(),
+                userIdx,
+                subjectIdx,
+                postEvaluateSubjectReviewReq.getScore()
+        };
+        this.jdbcTemplate.update(query, params);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+
+        int lastInsertId = this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+
+        String selectQuery = "select content,score from sub_review where id = ?";
+        return this.jdbcTemplate.queryForObject(selectQuery,
+                (rs,rowNum)-> new PostEvaluateSubjectReviewRes(
+                        rs.getString("content"),
+                        rs.getFloat("score")
+                ),lastInsertId);
+    }
 }

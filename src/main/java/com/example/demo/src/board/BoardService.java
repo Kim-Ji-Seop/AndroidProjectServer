@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static com.example.demo.config.BaseResponseStatus.*;
 
 @Service
@@ -46,6 +48,14 @@ public class BoardService {
         try{
             return boardDao.deleteExamSubject(userIdx,listIdx);
         } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public PostEvaluateSubjectReviewRes createEvaluateSubjectReview(int userIdx, int subjectIdx, PostEvaluateSubjectReviewReq postEvaluateSubjectReviewReq) throws BaseException {
+        try{
+            return boardDao.createEvaluateSubjectReview(userIdx,subjectIdx,postEvaluateSubjectReviewReq);
+        }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }

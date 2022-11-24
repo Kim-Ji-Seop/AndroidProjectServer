@@ -1,7 +1,7 @@
 package com.example.demo.src.board;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.board.model.GetExamSubjectListRes;
+import com.example.demo.src.board.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +27,36 @@ public class BoardProvider {
         try {
             return boardDao.getExamSubjectList(userIdx);
         } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 과목 조회
+    public List<GetEvaluateSubjectRes> getEvaluateSubjectList(Integer grade) throws BaseException {
+        try {
+            if(grade == null){
+                return boardDao.getEvaluateSubjectAllList(); // 전체과목
+            }else{
+                return boardDao.getEvaluateSubjectGradeList(grade); // 학년별과목
+            }
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public GetEvaluateSubjectOneRes getEvaluateSubject(int subjectIdx) throws BaseException {
+        try{
+            return boardDao.getEvaluateSubject(subjectIdx);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetEvaluateSubjectReviewRes> getEvaluateSubjectReviews(int subjectIdx) throws BaseException {
+        try{
+            return boardDao.getEvaluateSubjectReviews(subjectIdx);
+        }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
