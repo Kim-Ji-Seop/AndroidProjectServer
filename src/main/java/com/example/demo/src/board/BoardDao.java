@@ -127,16 +127,13 @@ public class BoardDao {
 
     public GetEvaluateSubjectOneRes getEvaluateSubject(int subjectIdx) {
         String query =
-                "select esb.id as id,esb.grade as grade,esb.subjectName as subjectName,esb.professor as professor,round(avg(score),1) as scoreAverage\n" +
+                "select esb.id as id,round(avg(score),1) as scoreAverage\n" +
                 "from sub_review\n" +
                 "inner join evaluate_sub_board esb on sub_review.subjectID = esb.id\n" +
                 "where esb.id = ?";
         return this.jdbcTemplate.queryForObject(query,
                 (rs, rowNum) -> new GetEvaluateSubjectOneRes(
                         rs.getInt("id"),
-                        rs.getInt("grade"),
-                        rs.getString("subjectName"),
-                        rs.getString("professor"),
                         rs.getFloat("scoreAverage")
                 ),subjectIdx);
     }

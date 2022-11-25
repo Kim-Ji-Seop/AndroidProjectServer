@@ -9,8 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetEvaluateSubjectOneRes {
     private int id;
-    private int grade;
-    private String subjectName;
-    private String professor;
     private float scoreAverage;
 }

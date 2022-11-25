@@ -64,19 +64,19 @@ com/example/demo/src/board/model/PatchDeleteExamSubjectRes.java
  com.example.demo.src.board.model.PatchDeleteExamSubjectRes
 com/example/demo/src/board/model/GetEvaluateSubjectRes.java
  com.example.demo.src.board.model.GetEvaluateSubjectRes
-com/example/demo/src/board/model/GetEvaluateSubjectOneRes.java
- com.example.demo.src.board.model.GetEvaluateSubjectOneRes
+com/example/demo/src/board/model/PostEvaluateSubjectReviewRes.java
+ com.example.demo.src.board.model.PostEvaluateSubjectReviewRes
 com/example/demo/src/board/model/GetEvaluateSubjectReviewRes.java
  com.example.demo.src.board.model.GetEvaluateSubjectReviewRes
+com/example/demo/src/board/model/PostEvaluateSubjectReviewReq.java
+ com.example.demo.src.board.model.PostEvaluateSubjectReviewReq
 com/example/demo/src/board/BoardProvider.java
  com.example.demo.src.board.BoardProvider
 com/example/demo/src/board/BoardService.java
  com.example.demo.src.board.BoardService
-com/example/demo/src/board/model/PostEvaluateSubjectReviewRes.java
- com.example.demo.src.board.model.PostEvaluateSubjectReviewRes
+com/example/demo/src/board/model/GetEvaluateSubjectOneRes.java
+ com.example.demo.src.board.model.GetEvaluateSubjectOneRes
 com/example/demo/src/board/BoardDao.java
  com.example.demo.src.board.BoardDao
-com/example/demo/src/board/model/PostEvaluateSubjectReviewReq.java
- com.example.demo.src.board.model.PostEvaluateSubjectReviewReq
 com/example/demo/src/board/BoardController.java
  com.example.demo.src.board.BoardController
