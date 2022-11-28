@@ -10,9 +10,8 @@ import java.sql.Date;
 @Setter
 @AllArgsConstructor
 public class GetCommentsRes {
-    private int communutyIdx;
-    private int grade;
+    private int commentIdx;
+    private int userIdx;
     private String title;
     private String content;
-    private String createdAt;
 }

@@ -7,9 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PatchCommunityRes {
-    private int communityIdx;
+public class GetIsAuthRes {
     private int userIdx;
-    private String title;
-    private String content;
 }

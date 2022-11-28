@@ -59,4 +59,28 @@ public class BoardService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public PostCommunityRes createCommunity(int userIdx, PostCommunityReq postCommunityReq) throws BaseException {
+        try{
+            return boardDao.createCommunity(userIdx,postCommunityReq);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public PatchCommunityRes updateCommunity(int userIdx, int communityIdx, PatchCommunityReq patchCommunityReq) throws BaseException {
+        try{
+            return boardDao.updateCommunity(userIdx,communityIdx,patchCommunityReq);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public DeleteCommunityRes deleteCommunity(int userIdx, int communityIdx) throws BaseException {
+        try{
+            return boardDao.deleteCommunity(userIdx,communityIdx);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

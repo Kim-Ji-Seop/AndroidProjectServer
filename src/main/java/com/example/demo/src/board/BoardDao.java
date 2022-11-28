@@ -197,7 +197,7 @@ public class BoardDao {
                 "select cb.id,u.grade,title,content,date_format(cb.createdAt, '%Y.%m.%d') as createdAt\n" +
                         "from community_board cb\n" +
                         "inner join user u on cb.userIdx = u.id\n" +
-                        "where u.grade = ? order by cb.updatedAt desc";
+                        "where u.grade = ? and cb.status = 'A' order by cb.updatedAt desc";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetCommunitiesRes(
                         rs.getInt("id"),
@@ -205,5 +205,85 @@ public class BoardDao {
                         rs.getString("title"),
                         rs.getString("content"),
                         rs.getString("createdAt")), grade);
+    }
+    @Transactional(rollbackFor = {Exception.class})
+    public PostCommunityRes createCommunity(int userIdx, PostCommunityReq postCommunityReq) {
+        String query = "insert into community_board (title,content,userIdx) values (?,?,?)";
+        Object[] params = new Object[]{
+                postCommunityReq.getTitle(),
+                postCommunityReq.getContent(),
+                userIdx
+        };
+        this.jdbcTemplate.update(query, params);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+
+        int lastInsertId = this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+
+        String selectQuery = "select cb.userIdx,u.grade,title,content\n" +
+                                "from community_board cb\n" +
+                                "inner join user u on cb.userIdx = u.id\n" +
+                                "where cb.id = ?";
+        return this.jdbcTemplate.queryForObject(selectQuery,
+                (rs,rowNum)-> new PostCommunityRes(
+                        rs.getInt("userIdx"),
+                        rs.getInt("grade"),
+                        rs.getString("title"),
+                        rs.getString("content")
+                ),lastInsertId);
+    }
+
+    @Transactional(rollbackFor = {Exception.class})
+    public PatchCommunityRes updateCommunity(int userIdx, int communityIdx, PatchCommunityReq patchCommunityReq) {
+        String query = "update community_board set title = ?, content = ? where id=? and userIdx=?";
+        Object[] params = new Object[]{
+                patchCommunityReq.getTitle(),
+                patchCommunityReq.getContent(),
+                communityIdx,
+                userIdx
+        };
+        this.jdbcTemplate.update(query, params);
+
+        // 방금 수정한 정보 조회
+        String responseQuery = "select id,userIdx,title,content from community_board where id=? and userIdx=?";
+        return this.jdbcTemplate.queryForObject(responseQuery,
+                (rs, rowNum) -> new PatchCommunityRes(
+                        rs.getInt("id"),
+                        rs.getInt("userIdx"),
+                        rs.getString("title"),
+                        rs.getString("content")),
+                communityIdx,userIdx);
+    }
+
+    @Transactional(rollbackFor = {Exception.class})
+    public DeleteCommunityRes deleteCommunity(int userIdx, int communityIdx) {
+        String query = "update community_board set status='D' where id=? and userIdx=?";
+        Object[] params = new Object[]{
+                communityIdx,
+                userIdx
+        };
+        this.jdbcTemplate.update(query, params);
+
+        // 방금 수정한 정보 조회
+        String responseQuery = "select id,status from community_board where id=? and userIdx=?";
+        return this.jdbcTemplate.queryForObject(responseQuery,
+                (rs, rowNum) -> new DeleteCommunityRes(
+                        rs.getInt("id"),
+                        rs.getString("status")),
+                communityIdx,userIdx);
+    }
+
+    public List<GetCommentsRes> getCommentsList(int communityIdx) {
+        String query =
+                "select c.id as commentIdx,u.id as userIdx,u.nickname, c.content\n" +
+                        "from comment c\n" +
+                        "inner join user u on c.userIdx = u.id\n" +
+                        "where c.boardIdx=? and c.status='A'";
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetCommentsRes(
+                        rs.getInt("commentIdx"),
+                        rs.getInt("userIdx"),
+                        rs.getString("nickname"),
+                        rs.getString("content")), communityIdx);
     }
 }

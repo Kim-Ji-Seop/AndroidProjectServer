@@ -73,4 +73,12 @@ public class BoardProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public List<GetCommentsRes> getCommentsList(int communityIdx) throws BaseException {
+        try{
+            return boardDao.getCommentsList(communityIdx);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

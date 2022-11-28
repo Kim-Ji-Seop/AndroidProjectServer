@@ -39,7 +39,7 @@ public class BoardController {
      * @return BaseResponse<List<GetExamSubjectListRes>>
      */
     @ResponseBody
-    @GetMapping("/exam-subjects") // (GET) www.seop.site/app/board/exam-subjects
+    @GetMapping("/exam-subjects") // (GET) www.seop.site/app/boards/exam-subjects
     public BaseResponse<List<GetExamSubjectListRes>> getExamSubjectList(){
         // Get Users
         try{
@@ -57,7 +57,7 @@ public class BoardController {
      * @return BaseResponse<PostExamSubjectRes>
      */
     @ResponseBody
-    @PostMapping("/exam-subjects") // (POST) www.seop.site/app/board/exam-subjects
+    @PostMapping("/exam-subjects") // (POST) www.seop.site/app/boards/exam-subjects
     public BaseResponse<PostExamSubjectRes> createExamSubject(@RequestBody PostExamSubjectReq postExamSubjectReq){
         try{
             // 형식적 Validation
@@ -79,7 +79,7 @@ public class BoardController {
      * @return BaseResponse<PatchExamSubjectRes>
      */
     @ResponseBody
-    @PatchMapping ("/exam-subjects/{listIdx}") // (PATCH) www.seop.site/app/board/exam-subjects/:listIdx
+    @PatchMapping ("/exam-subjects/{listIdx}") // (PATCH) www.seop.site/app/boards/exam-subjects/:listIdx
     public BaseResponse<PatchExamSubjectRes> refactorExamSubject(@PathVariable("listIdx") int listIdx, @RequestBody PatchExamSubjectReq patchExamSubjectReq){
         try{
             // 형식적 Validation
@@ -100,7 +100,7 @@ public class BoardController {
      * @return BaseResponse<PatchDeleteExamSubjectRes>
      */
     @ResponseBody
-    @PatchMapping ("/exam-subjects/del/{listIdx}") // (PATCH) www.seop.site/app/board/exam-subjects/del/:listIdx
+    @PatchMapping ("/exam-subjects/del/{listIdx}") // (PATCH) www.seop.site/app/boards/exam-subjects/del/:listIdx
     public BaseResponse<PatchDeleteExamSubjectRes> deleteExamSubject(@PathVariable("listIdx") int listIdx){
         try{
             int userIdx = jwtService.getUserIdx();
@@ -117,7 +117,7 @@ public class BoardController {
      * @return BaseResponse<List<GetEvaluateSubjectRes>>
      */
     @ResponseBody
-    @GetMapping("/evaluation-subjects") // (GET) www.seop.site/app/board/evaluation-subjects
+    @GetMapping("/evaluation-subjects") // (GET) www.seop.site/app/boards/evaluation-subjects
     public BaseResponse<List<GetEvaluateSubjectRes>> getEvaluateSubjectList(@RequestParam @Nullable Integer grade){
         try{
             List<GetEvaluateSubjectRes> getEvaluateSubjectRes = boardProvider.getEvaluateSubjectList(grade);
@@ -132,7 +132,7 @@ public class BoardController {
      * @return BaseResponse<GetEvaluateSubjectOneRes>
      */
     @ResponseBody
-    @GetMapping("/evaluation-subjects/{subjectIdx}") // (GET) www.seop.site/app/board/evaluation-subjects/:subjectIdx
+    @GetMapping("/evaluation-subjects/{subjectIdx}") // (GET) www.seop.site/app/boards/evaluation-subjects/:subjectIdx
     public BaseResponse<GetEvaluateSubjectOneRes> getEvaluateSubject(@PathVariable("subjectIdx") int subjectIdx){
         try{
             GetEvaluateSubjectOneRes getEvaluateSubjectOneRes = boardProvider.getEvaluateSubject(subjectIdx);
@@ -147,7 +147,7 @@ public class BoardController {
      * @return BaseResponse<List<GetEvaluateSubjectReviewRes>>
      */
     @ResponseBody
-    @GetMapping("/evaluation-subjects/reviews/{subjectIdx}") // (GET) www.seop.site/app/board/evaluation-subjects/reviews/:subjectIdx
+    @GetMapping("/evaluation-subjects/reviews/{subjectIdx}") // (GET) www.seop.site/app/boards/evaluation-subjects/reviews/:subjectIdx
     public BaseResponse<List<GetEvaluateSubjectReviewRes>> getEvaluateSubjectReviews(@PathVariable("subjectIdx") int subjectIdx){
         try{
             List<GetEvaluateSubjectReviewRes> getEvaluateSubjectReviewResList = boardProvider.getEvaluateSubjectReviews(subjectIdx);
@@ -162,7 +162,7 @@ public class BoardController {
      * @return BaseResponse<PostEvaluateSubjectReviewRes>
      */
     @ResponseBody
-    @PostMapping("/evaluation-subjects/reviews/{subjectIdx}") // (POST) www.seop.site/app/board/evaluation-subjects/reviews/:subjectIdx
+    @PostMapping("/evaluation-subjects/reviews/{subjectIdx}") // (POST) www.seop.site/app/boards/evaluation-subjects/reviews/:subjectIdx
     public BaseResponse<PostEvaluateSubjectReviewRes> createEvaluateSubjectReview(@PathVariable("subjectIdx") int subjectIdx,@RequestBody PostEvaluateSubjectReviewReq postEvaluateSubjectReviewReq){
         try{
             int userIdx = jwtService.getUserIdx();
@@ -178,11 +178,89 @@ public class BoardController {
      * @return BaseResponse<List<GetCommunitiesRes>>
      */
     @ResponseBody
-    @GetMapping("/communities") // (GET) www.seop.site/app/board/evaluation-subjects
+    @GetMapping("/communities") // (GET) www.seop.site/app/boards/communities
     public BaseResponse<List<GetCommunitiesRes>> getCommunitiesList(@RequestParam @Nullable Integer grade){
         try{
             List<GetCommunitiesRes> getCommunitiesResList = boardProvider.getCommunitiesList(grade);
             return new BaseResponse<>(getCommunitiesResList);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     *  커뮤니티 게시판 - 학년별 커뮤니티 게시글 수정/삭제 권한 API
+     * [GET] /communities/auth
+     * @return BaseResponse<GetIsAuthRes>
+     */
+    @ResponseBody
+    @GetMapping("/communities/auth") // (GET) www.seop.site/app/boards/communities/auth
+    public BaseResponse<GetIsAuthRes> getIsAuth(){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            return new BaseResponse<>(new GetIsAuthRes(userIdx));
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     *  커뮤니티 게시판 - 학년별 커뮤니티 게시글 작성 API
+     * [POST] /communities
+     * @return BaseResponse<PostCommunityRes>
+     */
+    @ResponseBody
+    @PostMapping("/communities") // (POST) www.seop.site/app/boards/communities
+    public BaseResponse<PostCommunityRes> createCommunity(@RequestBody PostCommunityReq postCommunityReq){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            PostCommunityRes postCommunityRes = boardService.createCommunity(userIdx,postCommunityReq);
+            return new BaseResponse<>(postCommunityRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     *  커뮤니티 게시판 - 학년별 커뮤니티 게시글 수정 API
+     * [PATCH] /communities/:communityIdx
+     * @return BaseResponse<PatchCommunityRes>
+     */
+    @ResponseBody
+    @PatchMapping("/communities/{communityIdx}") // (GET) www.seop.site/app/boards/communities/:communityIdx
+    public BaseResponse<PatchCommunityRes> updateCommunity(@PathVariable("communityIdx") int communityIdx,@RequestBody PatchCommunityReq patchCommunityReq){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            PatchCommunityRes patchCommunityRes = boardService.updateCommunity(userIdx,communityIdx,patchCommunityReq);
+            return new BaseResponse<>(patchCommunityRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     *  커뮤니티 게시판 - 학년별 커뮤니티 게시글 삭제 API
+     * [PATCH] /communities/del/:communityIdx
+     * @return BaseResponse<DeleteCommunityRes>
+     */
+    @ResponseBody
+    @PatchMapping("/communities/del/{communityIdx}") // (GET) www.seop.site/app/boards/communities/del/:communityIdx
+    public BaseResponse<DeleteCommunityRes> deleteCommunity(@PathVariable("communityIdx") int communityIdx){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            DeleteCommunityRes deleteCommunityRes = boardService.deleteCommunity(userIdx,communityIdx);
+            return new BaseResponse<>(deleteCommunityRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     *  커뮤니티 게시판 - 학년별 커뮤니티 게시판 댓글 조회 API
+     * [GET] /communities/comments/:communityIdx
+     * @return BaseResponse<List<GetCommentsRes>>
+     */
+    @ResponseBody
+    @GetMapping("/communities/comments/{communityIdx}") // (GET) www.seop.site/app/boards/communities/comments/:communityIdx
+    public BaseResponse<List<GetCommentsRes>> getCommentsList(@PathVariable("communityIdx") int communityIdx){
+        try{
+            List<GetCommentsRes> getCommentsResList = boardProvider.getCommentsList(communityIdx);
+            return new BaseResponse<>(getCommentsResList);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
