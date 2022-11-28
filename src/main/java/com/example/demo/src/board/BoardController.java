@@ -172,4 +172,19 @@ public class BoardController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    /**
+     *  커뮤니티 게시판 - 학년별 커뮤니티 게시판 조회 API
+     * [GET] /communities
+     * @return BaseResponse<List<GetCommunitiesRes>>
+     */
+    @ResponseBody
+    @GetMapping("/communities") // (GET) www.seop.site/app/board/evaluation-subjects
+    public BaseResponse<List<GetCommunitiesRes>> getCommunitiesList(@RequestParam @Nullable Integer grade){
+        try{
+            List<GetCommunitiesRes> getCommunitiesResList = boardProvider.getCommunitiesList(grade);
+            return new BaseResponse<>(getCommunitiesResList);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

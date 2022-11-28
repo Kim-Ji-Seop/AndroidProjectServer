@@ -60,4 +60,17 @@ public class BoardProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public List<GetCommunitiesRes> getCommunitiesList(Integer grade) throws BaseException {
+        try {
+            if(grade == null){
+                return boardDao.getCommunitiesListAllList(); // 전체과목
+            }else{
+                return boardDao.getCommunitiesListGradeList(grade); // 학년별과목
+            }
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
