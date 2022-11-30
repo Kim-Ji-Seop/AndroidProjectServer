@@ -176,13 +176,14 @@ public class BoardDao {
     // 전체학년 과목 조회
     public List<GetCommunitiesRes> getCommunitiesListAllList() {
         String query =
-                "select cb.id,u.grade,title,content,date_format(cb.createdAt, '%Y.%m.%d') as createdAt\n" +
+                "select cb.id,cb.userIdx,u.grade,title,content,date_format(cb.createdAt, '%Y.%m.%d') as createdAt\n" +
                         "from community_board cb\n" +
                         "inner join user u on cb.userIdx = u.id\n" +
                         "order by cb.updatedAt desc";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetCommunitiesRes(
                         rs.getInt("id"),
+                        rs.getInt("userIdx"),
                         rs.getInt("grade"),
                         rs.getString("title"),
                         rs.getString("content"),
@@ -194,13 +195,14 @@ public class BoardDao {
     // 학년별 과목 조회
     public List<GetCommunitiesRes> getCommunitiesListGradeList(Integer grade) {
         String query =
-                "select cb.id,u.grade,title,content,date_format(cb.createdAt, '%Y.%m.%d') as createdAt\n" +
+                "select cb.id,cb.userIdx,u.grade,title,content,date_format(cb.createdAt, '%Y.%m.%d') as createdAt\n" +
                         "from community_board cb\n" +
                         "inner join user u on cb.userIdx = u.id\n" +
                         "where u.grade = ? and cb.status = 'A' order by cb.updatedAt desc";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetCommunitiesRes(
                         rs.getInt("id"),
+                        rs.getInt("userIdx"),
                         rs.getInt("grade"),
                         rs.getString("title"),
                         rs.getString("content"),

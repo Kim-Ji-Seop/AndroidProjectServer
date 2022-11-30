@@ -9,6 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetCommunitiesRes {
     private int communutyIdx;
+    private int userIdx;
     private int grade;
     private String title;
     private String content;
