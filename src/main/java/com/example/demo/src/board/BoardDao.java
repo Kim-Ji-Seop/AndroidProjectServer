@@ -173,12 +173,13 @@ public class BoardDao {
                         rs.getFloat("score")
                 ),lastInsertId);
     }
-    // 전체학년 과목 조회
+    //
     public List<GetCommunitiesRes> getCommunitiesListAllList() {
         String query =
                 "select cb.id,cb.userIdx,u.grade,title,content,date_format(cb.createdAt, '%Y.%m.%d') as createdAt\n" +
                         "from community_board cb\n" +
                         "inner join user u on cb.userIdx = u.id\n" +
+                        "where cb.status='A'"+
                         "order by cb.updatedAt desc";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetCommunitiesRes(
@@ -192,7 +193,7 @@ public class BoardDao {
 
     }
 
-    // 학년별 과목 조회
+    //
     public List<GetCommunitiesRes> getCommunitiesListGradeList(Integer grade) {
         String query =
                 "select cb.id,cb.userIdx,u.grade,title,content,date_format(cb.createdAt, '%Y.%m.%d') as createdAt\n" +
