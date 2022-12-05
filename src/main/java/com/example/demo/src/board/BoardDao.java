@@ -289,4 +289,45 @@ public class BoardDao {
                         rs.getString("nickname"),
                         rs.getString("content")), communityIdx);
     }
+
+    public List<GetCoursesRes> getCoursesListAllList() {
+        String query =
+                "select esb.id,esb.grade,esb.subjectName,esb.professor,esb.`time`,esb.room,esb.separation,esb.credit,IFNULL((select round(avg(sr.score),1) as score\n" +
+                        "                                                                                                    from sub_review sr\n" +
+                        "                                                                                                    where esb.id = sr.subjectID),0) as scoreAverage\n" +
+                        "from evaluate_sub_board esb";
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetCoursesRes(
+                        rs.getInt("id"),
+                        rs.getInt("grade"),
+                        rs.getString("subjectName"),
+                        rs.getString("professor"),
+                        rs.getString("time"),
+                        rs.getString("room"),
+                        rs.getString("separation"),
+                        rs.getInt("credit"),
+                        rs.getFloat("scoreAverage"))
+        );
+    }
+
+    public List<GetCoursesRes> getCoursesListGradeList(Integer grade) {
+        String query =
+                "select esb.id,esb.grade,esb.subjectName,esb.professor,esb.`time`,esb.room,esb.separation,esb.credit,IFNULL((select round(avg(sr.score),1) as score\n" +
+                        "                                                                                                    from sub_review sr\n" +
+                        "                                                                                                    where esb.id = sr.subjectID),0) as scoreAverage\n" +
+                        "from evaluate_sub_board esb\n" +
+                        "where esb.grade=?";
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetCoursesRes(
+                        rs.getInt("id"),
+                        rs.getInt("grade"),
+                        rs.getString("subjectName"),
+                        rs.getString("professor"),
+                        rs.getString("time"),
+                        rs.getString("room"),
+                        rs.getString("separation"),
+                        rs.getInt("credit"),
+                        rs.getFloat("scoreAverage")),grade
+        );
+    }
 }

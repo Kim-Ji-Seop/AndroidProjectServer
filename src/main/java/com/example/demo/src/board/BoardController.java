@@ -265,4 +265,19 @@ public class BoardController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    /**
+     *  시간표 강의목록 조회
+     * [GET] /time-table/courses
+     * @return BaseResponse<List<GetCoursesRes>>
+     */
+    @ResponseBody
+    @GetMapping("/time-table/courses") // (GET) www.seop.site/app/boards/time-table/courses
+    public BaseResponse<List<GetCoursesRes>> getCoursesList(@RequestParam @Nullable Integer grade){
+        try{
+            List<GetCoursesRes> getCoursesResList = boardProvider.getCoursesList(grade);
+            return new BaseResponse<>(getCoursesResList);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

@@ -81,4 +81,17 @@ public class BoardProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public List<GetCoursesRes> getCoursesList(Integer grade) throws BaseException {
+        try {
+            if(grade == null){
+                return boardDao.getCoursesListAllList(); // 전체 강의
+            }else{
+                return boardDao.getCoursesListGradeList(grade); // 학년별 강의
+            }
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
