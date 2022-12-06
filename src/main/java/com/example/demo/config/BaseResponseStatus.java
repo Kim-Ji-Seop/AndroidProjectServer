@@ -28,8 +28,6 @@ public enum BaseResponseStatus {
 
     // 회원가입
     // [POST] /users
-//    POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
-//    POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
     POST_USERS_EXISTS_ID(false,2018,"중복된 아이디입니다."),
     POST_USERS_EXISTS_NICK_NAME(false,2019,"중복된 닉네임입니다."),
@@ -38,6 +36,8 @@ public enum BaseResponseStatus {
     POST_EXAM_SUB_TITLE_ISEMPTY(false,2022,"제목을 등록해주세요."),
     // 시험과제게시판 수정
     PATCH_EXAM_SUB_TITLE_ISEMPTY(false,2023,"제목을 등록해주세요."),
+    // 강의 추가 중복 예외
+    POST_COURSE_EXISTS(false,2024,"이미 추가한 강의입니다."),
     /**
      * 3000 : Response 오류
      */

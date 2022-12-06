@@ -104,22 +104,6 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserPasswordQuery,modifyUserPasswordParams);
     }
 
-//    //수정필요
-//    public User getPwd(PostLoginReq postLoginReq){
-//        String getPwdQuery = "select USER_ID, ID, PW, EMAIL, USER_NAME from USER where ID = ?";
-//        String getPwdParams = postLoginReq.getId();
-//
-//        return this.jdbcTemplate.queryForObject(getPwdQuery,
-//                (rs,rowNum)-> new User(
-//                        rs.getInt("USER_ID"),
-//                        rs.getString("ID"),
-//                        rs.getString("PW"),
-//                        rs.getString("USER_NAME"),
-//                        rs.getString("EMAIL")
-//                ),
-//                getPwdParams
-//                );
-//    }
     @Transactional(rollbackFor = {Exception.class})
     public User userLogin(PostLoginReq postLoginReq) throws BaseException {
         //암호화된 비밀번호를 params로 넣어준다
@@ -128,7 +112,6 @@ public class UserDao {
             pwdParams=new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postLoginReq.getPw());// 로그인 시 request받은 비밀번호 암호화 -> 회원 검색을 위함
             System.out.println(pwdParams);
         }catch (Exception ignored) {
-            System.out.println(ignored);
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
         // 패스워드 일치 검사

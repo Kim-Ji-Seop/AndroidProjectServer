@@ -16,8 +16,8 @@ com/example/demo/src/user/model/GetEssentialInfoRes.java
  com.example.demo.src.user.model.GetEssentialInfoRes
 com/example/demo/src/board/model/GetIsAuthRes.java
  com.example.demo.src.board.model.GetIsAuthRes
-com/example/demo/utils/JwtService.java
- com.example.demo.utils.JwtService
+com/example/demo/src/board/model/GetCoursesRes.java
+ com.example.demo.src.board.model.GetCoursesRes
 com/example/demo/src/user/model/PatchPwReq.java
  com.example.demo.src.user.model.PatchPwReq
 com/example/demo/src/user/model/PostUserRes.java
@@ -48,16 +48,16 @@ com/example/demo/src/board/model/PostExamSubjectReq.java
  com.example.demo.src.board.model.PostExamSubjectReq
 com/example/demo/src/board/model/DeleteCommunityRes.java
  com.example.demo.src.board.model.DeleteCommunityRes
-com/example/demo/src/user/UserDao.java
- com.example.demo.src.user.UserDao
-com/example/demo/config/BaseException.java
- com.example.demo.config.BaseException
+com/example/demo/src/board/model/PostCourseRes.java
+ com.example.demo.src.board.model.PostCourseRes
+com/example/demo/src/user/model/PostLoginRes.java
+ com.example.demo.src.user.model.PostLoginRes
 com/example/demo/src/board/model/GetCommunitiesRes.java
  com.example.demo.src.board.model.GetCommunitiesRes
-com/example/demo/config/BaseResponseStatus.java
- com.example.demo.config.BaseResponseStatus
-com/example/demo/config/BaseResponse.java
- com.example.demo.config.BaseResponse
+com/example/demo/src/board/model/PatchCommentRes.java
+ com.example.demo.src.board.model.PatchCommentRes
+com/example/demo/src/board/model/PostCommunityRes.java
+ com.example.demo.src.board.model.PostCommunityRes
 com/example/demo/src/board/model/PostExamSubjectRes.java
  com.example.demo.src.board.model.PostExamSubjectRes
 com/example/demo/src/board/model/PatchDeleteExamSubjectRes.java
@@ -86,27 +86,27 @@ com/example/demo/src/board/model/GetCommentsRes.java
  com.example.demo.src.board.model.GetCommentsRes
 com/example/demo/src/board/model/PatchCommunityRes.java
  com.example.demo.src.board.model.PatchCommunityRes
-com/example/demo/src/board/model/PatchCommentRes.java
- com.example.demo.src.board.model.PatchCommentRes
-com/example/demo/src/board/model/PostCommunityRes.java
- com.example.demo.src.board.model.PostCommunityRes
-com/example/demo/src/board/model/GetCoursesRes.java
- com.example.demo.src.board.model.GetCoursesRes
-com/example/demo/src/user/UserService.java
- com.example.demo.src.user.UserService
-com/example/demo/src/user/UserProvider.java
- com.example.demo.src.user.UserProvider
-com/example/demo/src/user/model/PostLoginRes.java
- com.example.demo.src.user.model.PostLoginRes
-com/example/demo/src/user/UserController.java
- com.example.demo.src.user.UserController
+com/example/demo/src/user/UserDao.java
+ com.example.demo.src.user.UserDao
 com/example/demo/src/board/BoardProvider.java
  com.example.demo.src.board.BoardProvider
-com/example/demo/src/board/BoardService.java
- com.example.demo.src.board.BoardService
+com/example/demo/src/user/UserService.java
+ com.example.demo.src.user.UserService
+com/example/demo/config/BaseResponseStatus.java
+ com.example.demo.config.BaseResponseStatus
+com/example/demo/config/BaseResponse.java
+ com.example.demo.config.BaseResponse
+com/example/demo/config/BaseException.java
+ com.example.demo.config.BaseException
 com/example/demo/src/board/BoardDao.java
  com.example.demo.src.board.BoardDao
+com/example/demo/utils/JwtService.java
+ com.example.demo.utils.JwtService
+com/example/demo/src/user/UserController.java
+ com.example.demo.src.user.UserController
+com/example/demo/src/user/UserProvider.java
+ com.example.demo.src.user.UserProvider
+com/example/demo/src/board/BoardService.java
+ com.example.demo.src.board.BoardService
 com/example/demo/src/board/BoardController.java
  com.example.demo.src.board.BoardController
-com/example/demo/src/board/model/PostCourseRes.java
- com.example.demo.src.board.model.PostCourseRes

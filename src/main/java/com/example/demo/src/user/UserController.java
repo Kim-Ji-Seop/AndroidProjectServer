@@ -60,30 +60,6 @@ public class UserController {
         }
     }
 
-//    @ResponseBody
-//    @GetMapping("/kakao")
-//    public void  kakaoCallback(@RequestParam String code) throws BaseException {
-//        String access_token = userService.getKaKaoAccessToken(code);
-//        userService.createKakaoUser(access_token);
-//    }
-//-----------------------------------------------------------------------------------------------
-    /**
-     * 회원 1명 조회 API
-     * [GET] /users/:userIdx
-     * @return BaseResponse<GetUserRes>
-     */
-    // Path-variable
-//    @ResponseBody
-//    @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/app/users/:userIdx
-//    public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) {
-//        // Get Users
-//        try{
-//            GetUserRes getUserRes = userProvider.getUser(userIdx);
-//            return new BaseResponse<>(getUserRes);
-//        } catch(BaseException exception){
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
     /**
      * 회원 1명 필수정보 조회 API
      * [GET] /users/:userIdx/essential
@@ -129,7 +105,6 @@ public class UserController {
             if(postLoginReq.getId().length() == 0 || postLoginReq.getPw().length() == 0){
                 return new BaseResponse<>(REQUEST_ERROR); // 2000 : 입력값 전체가 빈 값일 때
             }
-            userProvider.login(postLoginReq);
             PostLoginRes postLoginRes = userProvider.login(postLoginReq);
             return new BaseResponse<>(postLoginRes);
         } catch (BaseException exception){

@@ -1,6 +1,8 @@
 package com.example.demo.src.board;
 
+import com.example.demo.config.BaseException;
 import com.example.demo.src.board.model.*;
+import jdk.internal.org.jline.utils.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -8,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
+
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @Repository
 public class BoardDao {
@@ -332,7 +336,10 @@ public class BoardDao {
     }
 
     @Transactional(rollbackFor = {Exception.class})
-    public PostCourseRes createCourse(int userIdx, int courseIdx) {
+    public PostCourseRes createCourse(int userIdx, int courseIdx) throws BaseException {
+        if(createFlag(userIdx,courseIdx) == 1){
+            throw new BaseException(POST_COURSE_EXISTS); // 2024 : 이미 추가한 강의입니다.
+        }
         String query = "insert into user_map_course (userIdx,courseIdx) values (?,?)";
         Object[] params = new Object[]{
                 userIdx, courseIdx
@@ -350,5 +357,15 @@ public class BoardDao {
                 (rs,rowNum)-> new PostCourseRes(
                         rs.getInt("courseIdx")
                 ),lastInsertId);
+    }
+    public int createFlag(int userIdx, int courseIdx){
+
+        String query =
+                "select exists(select id\n" +
+                        "      from user_map_course\n" +
+                        "      where userIdx=? and courseIdx=? and status='A')";
+        return this.jdbcTemplate.queryForObject(query,
+                int.class,
+                userIdx,courseIdx);
     }
 }
