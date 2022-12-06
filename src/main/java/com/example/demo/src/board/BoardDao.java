@@ -100,15 +100,22 @@ public class BoardDao {
     // 전체학년 과목 조회
     public List<GetEvaluateSubjectRes> getEvaluateSubjectAllList() {
         String query =
-                "select id,grade,subjectName,professor\n" +
-                "from evaluate_sub_board\n" +
-                "where status = 'A'";
+                "select esb.id,esb.subjectName,esb.professor,esb.separation,esb.grade,esb.time,esb.room,esb.credit,IFNULL((select round(avg(sr.score),1) as score\n" +
+                        "                                                                                                    from sub_review sr\n" +
+                        "                                                                                                    where esb.id = sr.subjectID),0) as scoreAverage\n" +
+                        "from evaluate_sub_board esb\n" +
+                        "where esb.status='A'";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetEvaluateSubjectRes(
                         rs.getInt("id"),
-                        rs.getInt("grade"),
                         rs.getString("subjectName"),
-                        rs.getString("professor")
+                        rs.getString("professor"),
+                        rs.getString("separation"),
+                        rs.getInt("grade"),
+                        rs.getString("time"),
+                        rs.getString("room"),
+                        rs.getInt("credit"),
+                        rs.getFloat("scoreAverage")
                 )
         );
 
@@ -117,15 +124,22 @@ public class BoardDao {
     // 학년별 과목 조회
     public List<GetEvaluateSubjectRes> getEvaluateSubjectGradeList(Integer grade) {
         String query =
-                "select id,grade,subjectName,professor\n" +
-                        "from evaluate_sub_board\n" +
-                        "where status = 'A' and grade = ?";
+                "select esb.id,esb.subjectName,esb.professor,esb.separation,esb.grade,esb.time,esb.room,esb.credit,IFNULL((select round(avg(sr.score),1) as score\n" +
+                        "                                                                                                    from sub_review sr\n" +
+                        "                                                                                                    where esb.id = sr.subjectID),0) as scoreAverage\n" +
+                        "from evaluate_sub_board esb\n" +
+                        "where esb.status='A' and grade=?";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetEvaluateSubjectRes(
                         rs.getInt("id"),
-                        rs.getInt("grade"),
                         rs.getString("subjectName"),
-                        rs.getString("professor")
+                        rs.getString("professor"),
+                        rs.getString("separation"),
+                        rs.getInt("grade"),
+                        rs.getString("time"),
+                        rs.getString("room"),
+                        rs.getInt("credit"),
+                        rs.getFloat("scoreAverage")
                 ), grade);
     }
 
@@ -144,12 +158,14 @@ public class BoardDao {
 
     public List<GetEvaluateSubjectReviewRes> getEvaluateSubjectReviews(int subjectIdx) {
         String query =
-                "select content,score\n" +
-                        "from sub_review\n" +
-                        "inner join evaluate_sub_board esb on sub_review.subjectID = esb.id\n" +
+                "select u.nickname,sr.content,sr.score\n" +
+                        "from sub_review sr\n" +
+                        "inner join evaluate_sub_board esb on sr.subjectID = esb.id\n" +
+                        "inner join user u on sr.userIdx = u.id\n" +
                         "where esb.id = ?";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetEvaluateSubjectReviewRes(
+                        rs.getString("nickName"),
                         rs.getString("content"),
                         rs.getFloat("score")
                 ),subjectIdx);

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetEvaluateSubjectReviewRes {
+    private String nickName;
     private String content;
     private float score;
 }
