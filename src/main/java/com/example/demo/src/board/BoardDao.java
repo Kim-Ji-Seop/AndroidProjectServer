@@ -330,4 +330,25 @@ public class BoardDao {
                         rs.getFloat("scoreAverage")),grade
         );
     }
+
+    @Transactional(rollbackFor = {Exception.class})
+    public PostCourseRes createCourse(int userIdx, int courseIdx) {
+        String query = "insert into user_map_course (userIdx,courseIdx) values (?,?)";
+        Object[] params = new Object[]{
+                userIdx, courseIdx
+        };
+        this.jdbcTemplate.update(query, params);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+
+        int lastInsertId = this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+
+        String selectQuery = "select courseIdx \n" +
+                "from user_map_course \n" +
+                "where id = ?";
+        return this.jdbcTemplate.queryForObject(selectQuery,
+                (rs,rowNum)-> new PostCourseRes(
+                        rs.getInt("courseIdx")
+                ),lastInsertId);
+    }
 }

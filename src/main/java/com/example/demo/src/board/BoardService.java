@@ -83,4 +83,12 @@ public class BoardService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public PostCourseRes createCourse(int userIdx, int courseIdx) throws BaseException {
+        try{
+            return boardDao.createCourse(userIdx,courseIdx);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

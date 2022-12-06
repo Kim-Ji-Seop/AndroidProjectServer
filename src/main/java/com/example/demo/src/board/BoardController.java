@@ -280,4 +280,20 @@ public class BoardController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    /**
+     *  시간표 강의 추가
+     * [POST] /time-table/courses/{courseIdx}
+     * @return BaseResponse<PostCourseRes>
+     */
+    @ResponseBody
+    @PostMapping("/time-table/courses/{courseIdx}") // (GET) www.seop.site/app/boards/time-table/courses/:courseIdx
+    public BaseResponse<PostCourseRes> createCourse(@PathVariable("courseIdx") int courseIdx){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            PostCourseRes postCourseRes = boardService.createCourse(userIdx,courseIdx);
+            return new BaseResponse<>(postCourseRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }
