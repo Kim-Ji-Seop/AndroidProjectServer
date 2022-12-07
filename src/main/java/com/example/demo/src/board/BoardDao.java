@@ -387,16 +387,37 @@ public class BoardDao {
 
     public List<GetTimeTableRes> getTimeTableList(int userIdx) {
         String query =
-                "select umc.id,esb.subjectName,esb.room,esb.time\n" +
+                "select umc.id,esb.grade,esb.subjectName,esb.professor,esb.time,esb.room,esb.separation,esb.credit\n" +
                         "from evaluate_sub_board esb\n" +
                         "join user_map_course umc on esb.id = umc.courseIdx\n" +
                         "where umc.userIdx=? and umc.status='A'";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetTimeTableRes(
                         rs.getInt("id"),
+                        rs.getInt("grade"),
                         rs.getString("subjectName"),
+                        rs.getString("professor"),
+                        rs.getString("time"),
                         rs.getString("room"),
-                        rs.getString("time")),userIdx
+                        rs.getString("separation"),
+                        rs.getInt("credit")),userIdx
         );
+    }
+    @Transactional(rollbackFor = {Exception.class})
+    public DeleteCourseRes deleteMyCourse(int userIdx, int timetableIdx) {
+        String query = "update user_map_course set status='D' where id=? and userIdx=?";
+        Object[] params = new Object[]{
+                timetableIdx,
+                userIdx
+        };
+        this.jdbcTemplate.update(query, params);
+
+        // 방금 수정한 정보 조회
+        String responseQuery = "select id,status from user_map_course where id=? and userIdx=?";
+        return this.jdbcTemplate.queryForObject(responseQuery,
+                (rs, rowNum) -> new DeleteCourseRes(
+                        rs.getInt("id"),
+                        rs.getString("status")),
+                timetableIdx,userIdx);
     }
 }

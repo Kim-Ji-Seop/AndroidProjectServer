@@ -9,7 +9,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetTimeTableRes {
     private int timetableIdx;
+    private int courseGrade;
     private String subjectName;
-    private String room;
+    private String professor;
     private String time;
+    private String room;
+    private String separation;
+    private int credit;
 }

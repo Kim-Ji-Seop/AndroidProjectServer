@@ -91,4 +91,12 @@ public class BoardService {
             throw new BaseException((exception.getStatus()));
         }
     }
+
+    public DeleteCourseRes deleteMyCourse(int userIdx, int timetableIdx) throws BaseException {
+        try{
+            return boardDao.deleteMyCourse(userIdx,timetableIdx);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

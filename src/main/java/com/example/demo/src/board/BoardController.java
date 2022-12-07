@@ -297,17 +297,33 @@ public class BoardController {
         }
     }
     /**
-     *  시간표 조회 (내 강좌 조회)
-     * [GET] /time-table/courses
+     *  내 시간표 조회 (내 강좌 조회)
+     * [GET] /time-table/my-courses
      * @return BaseResponse<List<GetTimeTableRes>>
      */
     @ResponseBody
-    @GetMapping("/time-table/my-courses") // (GET) www.seop.site/app/boards/time-table/courses
+    @GetMapping("/time-table/my-courses") // (GET) www.seop.site/app/boards/time-table/my-courses
     public BaseResponse<List<GetTimeTableRes>> getTimeTableList(){
         try{
             int userIdx = jwtService.getUserIdx();
             List<GetTimeTableRes> getTimeTableResList = boardProvider.getTimeTableList(userIdx);
             return new BaseResponse<>(getTimeTableResList);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     *  내 시간표 삭제
+     * [PATCH] /time-table/courses
+     * @return BaseResponse<DeleteCourseRes>
+     */
+    @ResponseBody
+    @PatchMapping("/time-table/my-courses/del/{timetableIdx}") // (GET) www.seop.site/app/boards/time-table/my-courses/del/:courseIdx
+    public BaseResponse<DeleteCourseRes> deleteMyCourse(@PathVariable("timetableIdx") int timetableIdx){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            DeleteCourseRes deleteCourseRes = boardService.deleteMyCourse(userIdx,timetableIdx);
+            return new BaseResponse<>(deleteCourseRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
