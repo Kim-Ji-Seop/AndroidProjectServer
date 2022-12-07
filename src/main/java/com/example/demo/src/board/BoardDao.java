@@ -196,11 +196,17 @@ public class BoardDao {
     //
     public List<GetCommunitiesRes> getCommunitiesListAllList() {
         String query =
-                "select cb.id,cb.userIdx,u.grade,title,content,date_format(cb.createdAt, '%Y.%m.%d') as createdAt\n" +
+                "select cb.id,cb.userIdx,u.grade,title,content,case\n" +
+                        "                                                when (timestampdiff(second ,cb.createdAt,now()) between 1 and 59) then concat(cast(timestampdiff(second ,cb.createdAt,now()) as char),'초 전')\n" +
+                        "                                                when (timestampdiff(minute ,cb.createdAt,now()) between 1 and 59) then concat(cast(timestampdiff(minute ,cb.createdAt,now()) as char),'분 전')\n" +
+                        "                                                when (timestampdiff(hour ,cb.createdAt,now()) between 1 and 24) then concat(cast(timestampdiff(hour ,cb.createdAt,now()) as char),'시간 전')\n" +
+                        "                                                when (datediff(now(),cb.createdAt) between 1 and 30) then concat(cast(datediff(now(),cb.createdAt) as char), '일 전')\n" +
+                        "                                              end as createdAt,\n" +
+                        "    (select count(c.id) from comment c where c.boardIdx = cb.id) as commentCount\n" +
                         "from community_board cb\n" +
                         "inner join user u on cb.userIdx = u.id\n" +
-                        "where cb.status='A'"+
-                        "order by cb.updatedAt desc";
+                        "where cb.status='A'\n" +
+                        "order by cb.createdAt desc";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetCommunitiesRes(
                         rs.getInt("id"),
@@ -208,7 +214,8 @@ public class BoardDao {
                         rs.getInt("grade"),
                         rs.getString("title"),
                         rs.getString("content"),
-                        rs.getString("createdAt"))
+                        rs.getString("createdAt"),
+                        rs.getInt("commentCount"))
         );
 
     }
@@ -216,10 +223,17 @@ public class BoardDao {
     //
     public List<GetCommunitiesRes> getCommunitiesListGradeList(Integer grade) {
         String query =
-                "select cb.id,cb.userIdx,u.grade,title,content,date_format(cb.createdAt, '%Y.%m.%d') as createdAt\n" +
+                "select cb.id,cb.userIdx,u.grade,title,content,case\n" +
+                        "                                                when (timestampdiff(second ,cb.createdAt,now()) between 1 and 59) then concat(cast(timestampdiff(second ,cb.createdAt,now()) as char),'초 전')\n" +
+                        "                                                when (timestampdiff(minute ,cb.createdAt,now()) between 1 and 59) then concat(cast(timestampdiff(minute ,cb.createdAt,now()) as char),'분 전')\n" +
+                        "                                                when (timestampdiff(hour ,cb.createdAt,now()) between 1 and 24) then concat(cast(timestampdiff(hour ,cb.createdAt,now()) as char),'시간 전')\n" +
+                        "                                                when (datediff(now(),cb.createdAt) between 1 and 30) then concat(cast(datediff(now(),cb.createdAt) as char), '일 전')\n" +
+                        "                                              end as createdAt,\n" +
+                        "    (select count(c.id) from comment c where c.boardIdx = cb.id) as commentCount\n" +
                         "from community_board cb\n" +
                         "inner join user u on cb.userIdx = u.id\n" +
-                        "where u.grade = ? and cb.status = 'A' order by cb.updatedAt desc";
+                        "where cb.status='A' and u.grade=?\n" +
+                        "order by cb.createdAt desc";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetCommunitiesRes(
                         rs.getInt("id"),
@@ -227,7 +241,8 @@ public class BoardDao {
                         rs.getInt("grade"),
                         rs.getString("title"),
                         rs.getString("content"),
-                        rs.getString("createdAt")), grade);
+                        rs.getString("createdAt"),
+                        rs.getInt("commentCount")), grade);
     }
     @Transactional(rollbackFor = {Exception.class})
     public PostCommunityRes createCommunity(int userIdx, PostCommunityReq postCommunityReq) {
