@@ -296,4 +296,20 @@ public class BoardController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    /**
+     *  시간표 조회 (내 강좌 조회)
+     * [GET] /time-table/courses
+     * @return BaseResponse<List<GetTimeTableRes>>
+     */
+    @ResponseBody
+    @GetMapping("/time-table/my-courses") // (GET) www.seop.site/app/boards/time-table/courses
+    public BaseResponse<List<GetTimeTableRes>> getTimeTableList(){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            List<GetTimeTableRes> getTimeTableResList = boardProvider.getTimeTableList(userIdx);
+            return new BaseResponse<>(getTimeTableResList);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

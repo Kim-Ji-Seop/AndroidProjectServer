@@ -94,4 +94,13 @@ public class BoardProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public List<GetTimeTableRes> getTimeTableList(int userIdx) throws BaseException{
+
+        try{
+             return boardDao.getTimeTableList(userIdx); // 학년별 강의
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
