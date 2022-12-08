@@ -12,6 +12,7 @@ import java.sql.Date;
 public class GetCommentsRes {
     private int commentIdx;
     private int userIdx;
-    private String title;
+    private String nickname;
     private String content;
+    private String correctCreatedAt;
 }

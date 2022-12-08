@@ -202,7 +202,8 @@ public class BoardDao {
                         "                                                when (timestampdiff(hour ,cb.createdAt,now()) between 1 and 24) then concat(cast(timestampdiff(hour ,cb.createdAt,now()) as char),'시간 전')\n" +
                         "                                                when (datediff(now(),cb.createdAt) between 1 and 30) then concat(cast(datediff(now(),cb.createdAt) as char), '일 전')\n" +
                         "                                              end as createdAt,\n" +
-                        "    (select count(c.id) from comment c where c.boardIdx = cb.id) as commentCount\n" +
+                        "    (select count(c.id) from comment c where c.boardIdx = cb.id) as commentCount,\n" +
+                        "    date_format(cb.createdAt,'%m/%d %H:%i') as correctCreatedAt,u.nickname\n" +
                         "from community_board cb\n" +
                         "inner join user u on cb.userIdx = u.id\n" +
                         "where cb.status='A'\n" +
@@ -215,7 +216,9 @@ public class BoardDao {
                         rs.getString("title"),
                         rs.getString("content"),
                         rs.getString("createdAt"),
-                        rs.getInt("commentCount"))
+                        rs.getInt("commentCount"),
+                        rs.getString("correctCreatedAt"),
+                        rs.getString("nickname"))
         );
 
     }
@@ -229,7 +232,8 @@ public class BoardDao {
                         "                                                when (timestampdiff(hour ,cb.createdAt,now()) between 1 and 24) then concat(cast(timestampdiff(hour ,cb.createdAt,now()) as char),'시간 전')\n" +
                         "                                                when (datediff(now(),cb.createdAt) between 1 and 30) then concat(cast(datediff(now(),cb.createdAt) as char), '일 전')\n" +
                         "                                              end as createdAt,\n" +
-                        "    (select count(c.id) from comment c where c.boardIdx = cb.id) as commentCount\n" +
+                        "    (select count(c.id) from comment c where c.boardIdx = cb.id) as commentCount,\n" +
+                        "    date_format(cb.createdAt,'%m/%d %H:%i') as correctCreatedAt,u.nickname\n" +
                         "from community_board cb\n" +
                         "inner join user u on cb.userIdx = u.id\n" +
                         "where cb.status='A' and u.grade=?\n" +
@@ -242,7 +246,9 @@ public class BoardDao {
                         rs.getString("title"),
                         rs.getString("content"),
                         rs.getString("createdAt"),
-                        rs.getInt("commentCount")), grade);
+                        rs.getInt("commentCount"),
+                        rs.getString("correctCreatedAt"),
+                        rs.getString("nickname")), grade);
     }
     @Transactional(rollbackFor = {Exception.class})
     public PostCommunityRes createCommunity(int userIdx, PostCommunityReq postCommunityReq) {
@@ -313,7 +319,7 @@ public class BoardDao {
 
     public List<GetCommentsRes> getCommentsList(int communityIdx) {
         String query =
-                "select c.id as commentIdx,u.id as userIdx,u.nickname, c.content\n" +
+                "select c.id as commentIdx,u.id as userIdx,u.nickname, c.content,date_format(c.createdAt,'%m/%d %H:%i') as correctCreatedAt\n" +
                         "from comment c\n" +
                         "inner join user u on c.userIdx = u.id\n" +
                         "where c.boardIdx=? and c.status='A'";
@@ -322,7 +328,8 @@ public class BoardDao {
                         rs.getInt("commentIdx"),
                         rs.getInt("userIdx"),
                         rs.getString("nickname"),
-                        rs.getString("content")), communityIdx);
+                        rs.getString("content"),
+                        rs.getString("correctCreatedAt")), communityIdx);
     }
 
     public List<GetCoursesRes> getCoursesListAllList() {

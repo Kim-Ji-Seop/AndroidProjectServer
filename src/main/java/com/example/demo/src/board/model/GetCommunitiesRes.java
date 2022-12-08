@@ -15,4 +15,6 @@ public class GetCommunitiesRes {
     private String content;
     private String createdAt;
     private int commentCount;
+    private String correctCreatedAt;
+    private String nickname;
 }
