@@ -442,4 +442,45 @@ public class BoardDao {
                         rs.getString("status")),
                 timetableIdx,userIdx);
     }
+
+    public List<GetTopReviewRes> getTopReviews() {
+        String query =
+                "select esb.subjectName,esb.professor,sr.content,sr.score\n" +
+                        "from sub_review sr\n" +
+                        "join evaluate_sub_board esb on esb.id = sr.subjectID\n" +
+                        "where sr.status='A'\n" +
+                        "order by sr.createdAt desc limit 4";
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetTopReviewRes(
+                        rs.getString("subjectName"),
+                        rs.getString("professor"),
+                        rs.getString("content"),
+                        rs.getFloat("score"))
+        );
+    }
+
+    public List<GetTopCommunitiesRes> getTopCommunities() {
+        String query =
+                "select cb.id,cb.userIdx,u.grade,title,content,case\n" +
+                        "                                                when (timestampdiff(second ,cb.createdAt,now()) between 1 and 59) then concat(cast(timestampdiff(second ,cb.createdAt,now()) as char),'초 전')\n" +
+                        "                                                when (timestampdiff(minute ,cb.createdAt,now()) between 1 and 59) then concat(cast(timestampdiff(minute ,cb.createdAt,now()) as char),'분 전')\n" +
+                        "                                                when (timestampdiff(hour ,cb.createdAt,now()) between 1 and 24) then concat(cast(timestampdiff(hour ,cb.createdAt,now()) as char),'시간 전')\n" +
+                        "                                                when (datediff(now(),cb.createdAt) between 1 and 30) then concat(cast(datediff(now(),cb.createdAt) as char), '일 전')\n" +
+                        "                                              end as createdAt,\n" +
+                        "    (select count(c.id) from comment c where c.boardIdx = cb.id) as commentCount\n" +
+                        "from community_board cb\n" +
+                        "inner join user u on cb.userIdx = u.id\n" +
+                        "where cb.status='A'\n" +
+                        "order by (select count(c.id) from comment c where c.boardIdx = cb.id) desc limit 4";
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetTopCommunitiesRes(
+                        rs.getInt("id"),
+                        rs.getInt("userIdx"),
+                        rs.getInt("grade"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getString("createdAt"),
+                        rs.getInt("commentCount"))
+        );
+    }
 }

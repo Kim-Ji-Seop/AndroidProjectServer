@@ -328,4 +328,34 @@ public class BoardController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    /**
+     *  가장 최근 강의평 4개
+     * [GET] /evaluation-subjects/reviews/top-ranks
+     * @return BaseResponse<List<GetTopReviewRes>>
+     */
+    @ResponseBody
+    @GetMapping("/evaluation-subjects/reviews/top-ranks") // (GET) www.seop.site/app/boards/evaluation-subjects/reviews/top-ranks
+    public BaseResponse<List<GetTopReviewRes>> getTopReviews(){
+        try{
+            List<GetTopReviewRes> getTopReviewResList = boardProvider.getTopReviews();
+            return new BaseResponse<>(getTopReviewResList);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     * 커뮤니티 게시글 댓글 많은 게시물 4개
+     * [GET] /communities/comments/top-ranks
+     * @return BaseResponse<List<GetTopCommunities>>
+     */
+    @ResponseBody
+    @GetMapping("/communities/comments/top-ranks") // (GET) www.seop.site/app/boards/communities/comments/top-ranks
+    public BaseResponse<List<GetTopCommunitiesRes>> getTopCommunities(){
+        try{
+            List<GetTopCommunitiesRes> getTopCommunitiesResList = boardProvider.getTopCommunities();
+            return new BaseResponse<>(getTopCommunitiesResList);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

@@ -95,10 +95,26 @@ public class BoardProvider {
         }
     }
 
-    public List<GetTimeTableRes> getTimeTableList(int userIdx) throws BaseException{
+    public List<GetTimeTableRes> getTimeTableList(int userIdx) throws BaseException {
 
         try{
              return boardDao.getTimeTableList(userIdx); // 학년별 강의
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetTopReviewRes> getTopReviews() throws BaseException {
+        try{
+            return boardDao.getTopReviews(); // 학년별 강의
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetTopCommunitiesRes> getTopCommunities() throws BaseException {
+        try{
+            return boardDao.getTopCommunities(); // 학년별 강의
         }catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
