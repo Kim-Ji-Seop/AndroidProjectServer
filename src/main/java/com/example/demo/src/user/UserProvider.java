@@ -42,7 +42,7 @@ public class UserProvider {
         if(postLoginReq.getPw().equals(password)){
             int userIdx = user.getUserIdx(); // response로 보낼 userId
             String jwt = jwtService.createJwt(userIdx); // jwt response
-            return new PostLoginRes(userIdx,jwt,user.getGrade());
+            return new PostLoginRes(userIdx,jwt,user.getGrade(),user.getDepartment(),user.getNickName());
         }
         else{
             throw new BaseException(FAILED_TO_LOGIN); // 비밀번호가 다르다면 에러메세지를 출력한다.

@@ -11,4 +11,6 @@ public class PostLoginRes {
     private int userIdx;
     private String jwt;
     private int grade;
+    private String department;
+    private String nickName;
 }
