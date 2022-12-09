@@ -119,4 +119,12 @@ public class BoardProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public List<GetRemainTimeExamSubjectRes> getRemainTimes(int userIdx) throws BaseException {
+        try{
+            return boardDao.getRemainTimes(userIdx); // 학년별 강의
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

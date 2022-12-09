@@ -483,4 +483,19 @@ public class BoardDao {
                         rs.getInt("commentCount"))
         );
     }
+
+    public List<GetRemainTimeExamSubjectRes> getRemainTimes(int userIdx) {
+        String query =
+                "select esb.id,esb.title, esb.content, date_format(esb.endAt,'%Y-%m-%d') as endAt\n" +
+                        "from exam_sub_board esb\n" +
+                        "where current_date <= date(esb.endAt) and status='A' and esb.userIdx=?\n" +
+                        "order by esb.endAt";
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetRemainTimeExamSubjectRes(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getString("endAt")),userIdx
+        );
+    }
 }

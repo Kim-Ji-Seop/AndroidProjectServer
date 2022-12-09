@@ -358,4 +358,20 @@ public class BoardController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    /**
+     * 아직 남은 일정 > 일정화면
+     * [GET] /exam-subjects/remain-times
+     * @return BaseResponse<List<GetRemainTimeExamSubjectRes>>
+     */
+    @ResponseBody
+    @GetMapping("/exam-subjects/remain-times") // (GET) www.seop.site/app/boards/exam-subjects/remain-times
+    public BaseResponse<List<GetRemainTimeExamSubjectRes>> getRemainTimes(){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            List<GetRemainTimeExamSubjectRes> getRemainTimeExamSubjectResList = boardProvider.getRemainTimes(userIdx);
+            return new BaseResponse<>(getRemainTimeExamSubjectResList);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }
