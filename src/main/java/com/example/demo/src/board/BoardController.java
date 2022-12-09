@@ -374,4 +374,20 @@ public class BoardController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    /**
+     * 커뮤니티 댓글 작성
+     * [POST] /communities/comments
+     * @return BaseResponse<PostCommentRes>
+     */
+    @ResponseBody
+    @PostMapping("/communities/comments") // (POST) www.seop.site/app/boards/communities/comments
+    public BaseResponse<PostCommentRes> createComment(@RequestBody PostCommentReq postCommentReq){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            PostCommentRes postCommentRes = boardService.createComment(userIdx,postCommentReq);
+            return new BaseResponse<>(postCommentRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

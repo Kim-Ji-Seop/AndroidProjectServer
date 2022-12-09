@@ -99,4 +99,12 @@ public class BoardService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public PostCommentRes createComment(int userIdx, PostCommentReq postCommentReq) throws BaseException {
+        try{
+            return boardDao.createComment(userIdx,postCommentReq);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

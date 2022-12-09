@@ -498,4 +498,25 @@ public class BoardDao {
                         rs.getString("endAt")),userIdx
         );
     }
+    @Transactional(rollbackFor = {Exception.class})
+    public PostCommentRes createComment(int userIdx, PostCommentReq postCommentReq) {
+        String query = "insert into comment (content,userIdx,boardIdx) values (?,?,?)";
+        Object[] params = new Object[]{
+                postCommentReq.getContent(),userIdx,postCommentReq.getCommunityIdx()
+        };
+        this.jdbcTemplate.update(query, params);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+
+        int lastInsertId = this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+
+        String selectQuery = "select id,content \n" +
+                "from comment \n" +
+                "where id = ?";
+        return this.jdbcTemplate.queryForObject(selectQuery,
+                (rs,rowNum)-> new PostCommentRes(
+                        rs.getInt("id"),
+                        rs.getString("content")
+                ),lastInsertId);
+    }
 }
